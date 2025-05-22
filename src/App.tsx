@@ -25,11 +25,11 @@ const App = () => {
 
   useEffect(() => {
     // Check if this is the first visit
-    const hasVisited = localStorage.getItem("has_visited_echoes");
+    const hasVisited = localStorage.getItem("has_visited_arch");
     if (hasVisited) {
       setIsFirstVisit(false);
     } else {
-      localStorage.setItem("has_visited_echoes", "true");
+      localStorage.setItem("has_visited_arch", "true");
     }
   }, []);
 

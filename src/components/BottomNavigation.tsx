@@ -16,16 +16,17 @@ const BottomNavigation = () => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center h-16 px-2 z-50">
-      {navItems.map((item) => (
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center h-16 px-2 z-50 animate-slide-in-bottom">
+      {navItems.map((item, index) => (
         <Link
           key={item.path}
           to={item.path}
-          className={`flex flex-col items-center justify-center py-1 px-3 ${
+          className={`flex flex-col items-center justify-center py-1 px-3 transition-all duration-300 hover:scale-110 ${
             currentPath === item.path
-              ? "text-india-saffron"
+              ? "text-arch"
               : "text-gray-500"
           }`}
+          style={{ animationDelay: `${index * 100}ms` }}
         >
           {item.icon}
           <span className="text-xs mt-1">{item.label}</span>
