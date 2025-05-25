@@ -9,7 +9,172 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      categories: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      favorites: {
+        Row: {
+          created_at: string
+          id: string
+          location_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          location_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          location_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "heritage_locations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      heritage_locations: {
+        Row: {
+          category_id: string | null
+          created_at: string
+          created_by: string | null
+          full_description: string | null
+          historical_period: string | null
+          id: string
+          image_url: string | null
+          location_city: string | null
+          location_coordinates: Json | null
+          location_state: string | null
+          short_description: string | null
+          title: string
+          unesco_status: boolean | null
+          updated_at: string
+          visit_info: Json | null
+        }
+        Insert: {
+          category_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          full_description?: string | null
+          historical_period?: string | null
+          id?: string
+          image_url?: string | null
+          location_city?: string | null
+          location_coordinates?: Json | null
+          location_state?: string | null
+          short_description?: string | null
+          title: string
+          unesco_status?: boolean | null
+          updated_at?: string
+          visit_info?: Json | null
+        }
+        Update: {
+          category_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          full_description?: string | null
+          historical_period?: string | null
+          id?: string
+          image_url?: string | null
+          location_city?: string | null
+          location_coordinates?: Json | null
+          location_state?: string | null
+          short_description?: string | null
+          title?: string
+          unesco_status?: boolean | null
+          updated_at?: string
+          visit_info?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "heritage_locations_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

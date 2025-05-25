@@ -1,79 +1,104 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const Auth = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    // Check if user is already logged in
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate("/");
+      }
+    };
+    checkUser();
+  }, [navigate]);
+
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate authentication
-    setTimeout(() => {
-      setLoading(false);
-      
-      // For demo purposes, any credentials will work
-      localStorage.setItem("echoes_user", JSON.stringify({
-        name: isLogin ? email.split("@")[0] : name,
+    try {
+      const { data, error } = await supabase.auth.signUp({
         email,
-        role: "user"
-      }));
-      
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+          }
+        }
+      });
+
+      if (error) throw error;
+
       toast({
-        title: isLogin ? "Welcome back!" : "Account created",
-        description: isLogin 
-          ? "You have successfully logged in." 
-          : "Your account has been created successfully.",
+        title: "Account created successfully!",
+        description: "Please check your email to verify your account.",
+      });
+      
+      setIsLogin(true);
+    } catch (error: any) {
+      toast({
+        title: "Error creating account",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Welcome back!",
+        description: "You have successfully logged in.",
       });
       
       navigate("/");
-    }, 1500);
-  };
-
-  const handleAdminLogin = () => {
-    setLoading(true);
-    
-    // Simulate admin authentication
-    setTimeout(() => {
-      setLoading(false);
-      localStorage.setItem("echoes_user", JSON.stringify({
-        name: "Admin",
-        email: "admin@echoesofindia.com",
-        role: "admin"
-      }));
-      
+    } catch (error: any) {
       toast({
-        title: "Admin access granted",
-        description: "You've logged in as an administrator.",
+        title: "Error signing in",
+        description: error.message,
+        variant: "destructive",
       });
-      
-      navigate("/admin");
-    }, 1500);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleGuestAccess = () => {
-    localStorage.setItem("echoes_user", JSON.stringify({
-      name: "Guest",
-      email: "guest@example.com",
-      role: "guest"
-    }));
-    
+    // For guest access, we'll just navigate without authentication
     navigate("/");
   };
+
+  const handleSubmit = isLogin ? handleSignIn : handleSignUp;
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <div className="h-40 bg-gradient-to-r from-india-saffron to-india-deepSaffron flex items-center justify-center">
-        <h1 className="text-white text-3xl font-poppins font-bold">Echoes of India</h1>
+        <h1 className="text-white text-3xl font-poppins font-bold">A.R.C.H</h1>
       </div>
       
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-8">
@@ -83,13 +108,13 @@ const Auth = () => {
               className={`flex-1 py-4 font-medium text-center ${isLogin ? 'text-india-saffron border-b-2 border-india-saffron' : 'text-gray-500'}`}
               onClick={() => setIsLogin(true)}
             >
-              User Login
+              Sign In
             </button>
             <button 
               className={`flex-1 py-4 font-medium text-center ${!isLogin ? 'text-india-saffron border-b-2 border-india-saffron' : 'text-gray-500'}`}
               onClick={() => setIsLogin(false)}
             >
-              Register
+              Sign Up
             </button>
           </div>
           
@@ -97,14 +122,14 @@ const Auth = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               {!isLogin && (
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
                     Full Name
                   </label>
                   <Input
-                    id="name"
+                    id="fullName"
                     type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
                     placeholder="Enter your full name"
                     required={!isLogin}
                   />
@@ -136,6 +161,7 @@ const Auth = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
                   required
+                  minLength={6}
                 />
               </div>
               
@@ -144,20 +170,11 @@ const Auth = () => {
                 className="w-full bg-india-saffron hover:bg-india-deepSaffron text-white"
                 disabled={loading}
               >
-                {loading ? "Please wait..." : isLogin ? "Login" : "Create Account"}
+                {loading ? "Please wait..." : isLogin ? "Sign In" : "Create Account"}
               </Button>
             </form>
             
             <div className="mt-6 pt-6 border-t border-gray-200">
-              <Button 
-                onClick={handleAdminLogin} 
-                variant="outline" 
-                className="w-full mb-3"
-                disabled={loading}
-              >
-                Admin Login
-              </Button>
-              
               <Button 
                 onClick={handleGuestAccess} 
                 variant="secondary" 

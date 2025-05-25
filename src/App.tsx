@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 // Pages
 import Index from "./pages/Index";
@@ -36,27 +37,29 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/splash" element={<SplashScreen />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/details/:id" element={<Details />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/favorites" element={<Favorites />} />
-          <Route path="/profile" element={<Profile />} />
-          
-          {/* Initial redirection based on first visit */}
-          <Route 
-            path="*" 
-            element={
-              isFirstVisit ? <Navigate to="/splash" /> : <NotFound />
-            } 
-          />
-        </Routes>
+        <AuthProvider>
+          <Toaster />
+          <Sonner />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/splash" element={<SplashScreen />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/details/:id" element={<Details />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/favorites" element={<Favorites />} />
+            <Route path="/profile" element={<Profile />} />
+            
+            {/* Initial redirection based on first visit */}
+            <Route 
+              path="*" 
+              element={
+                isFirstVisit ? <Navigate to="/splash" /> : <NotFound />
+              } 
+            />
+          </Routes>
+        </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

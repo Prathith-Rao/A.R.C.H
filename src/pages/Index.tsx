@@ -1,45 +1,111 @@
 
 import React, { useEffect, useState } from "react";
-import { HeritageItem, mockHeritageData } from "@/data/heritageData";
+import { useNavigate } from "react-router-dom";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { Menu, Heart } from "lucide-react";
 import BottomNavigation from "@/components/BottomNavigation";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/components/ui/use-toast";
+
+interface HeritageLocation {
+  id: string;
+  title: string;
+  short_description: string;
+  image_url: string;
+  location_city: string;
+  location_state: string;
+  categories: { name: string; color: string } | null;
+}
+
+interface Category {
+  id: string;
+  name: string;
+  description: string;
+  color: string;
+}
 
 const Index = () => {
-  const [user, setUser] = useState<any>(null);
-  const [featured, setFeatured] = useState<HeritageItem[]>([]);
-  const [trending, setTrending] = useState<HeritageItem[]>([]);
-  const [recent, setRecent] = useState<HeritageItem[]>([]);
+  const { user, loading, signOut, isAdmin } = useAuth();
+  const [featured, setFeatured] = useState<HeritageLocation[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [dataLoading, setDataLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if user is logged in
-    const storedUser = localStorage.getItem("echoes_user");
-    if (!storedUser) {
+    if (!loading && !user) {
       navigate("/splash");
       return;
     }
-    
-    setUser(JSON.parse(storedUser));
-    
-    // Filter heritage items
-    setFeatured(mockHeritageData.filter(item => item.featured));
-    setTrending(mockHeritageData.filter(item => item.trending));
-    setRecent([...mockHeritageData].sort((a, b) => 
-      new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()
-    ).slice(0, 3));
-  }, [navigate]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("echoes_user");
+    if (user) {
+      fetchData();
+    }
+  }, [loading, user, navigate]);
+
+  const fetchData = async () => {
+    try {
+      // Fetch heritage locations with categories
+      const { data: locations, error: locationsError } = await supabase
+        .from('heritage_locations')
+        .select(`
+          id,
+          title,
+          short_description,
+          image_url,
+          location_city,
+          location_state,
+          categories (
+            name,
+            color
+          )
+        `)
+        .limit(10);
+
+      if (locationsError) throw locationsError;
+
+      // Fetch categories
+      const { data: categoriesData, error: categoriesError } = await supabase
+        .from('categories')
+        .select('*');
+
+      if (categoriesError) throw categoriesError;
+
+      setFeatured(locations || []);
+      setCategories(categoriesData || []);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      toast({
+        title: "Error loading data",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setDataLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    await signOut();
     navigate("/auth");
   };
 
   const handleItemClick = (id: string) => {
     navigate(`/details/${id}`);
   };
+
+  const handleCategoryClick = (categoryId: string) => {
+    navigate(`/explore?category=${categoryId}`);
+  };
+
+  if (loading || dataLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-pulse-slow">Loading...</div>
+      </div>
+    );
+  }
 
   if (!user) return null;
 
@@ -57,22 +123,25 @@ const Index = () => {
             <DrawerContent className="h-[85vh]">
               <div className="p-4">
                 <div className="py-6 border-b mb-4">
-                  <h2 className="text-xl font-semibold">{user.name}</h2>
+                  <h2 className="text-xl font-semibold">{user.user_metadata?.full_name || user.email}</h2>
                   <p className="text-gray-500 text-sm">{user.email}</p>
                 </div>
                 
                 <div className="space-y-4">
                   <h3 className="font-medium text-gray-700">Explore by Category</h3>
-                  {["Monument", "Art Form", "Festival", "Cuisine"].map(category => (
-                    <div key={category} className="p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                      {category}
-                    </div>
-                  ))}
-                  
-                  <h3 className="font-medium text-gray-700 mt-6">Explore by State</h3>
-                  {["Rajasthan", "Tamil Nadu", "Kerala", "Uttar Pradesh"].map(state => (
-                    <div key={state} className="p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                      {state}
+                  {categories.map(category => (
+                    <div 
+                      key={category.id} 
+                      className="p-3 border rounded-lg cursor-pointer hover:bg-gray-50"
+                      onClick={() => handleCategoryClick(category.id)}
+                    >
+                      <div className="flex items-center">
+                        <div 
+                          className="w-4 h-4 rounded-full mr-3"
+                          style={{ backgroundColor: category.color }}
+                        />
+                        {category.name}
+                      </div>
                     </div>
                   ))}
                   
@@ -87,9 +156,9 @@ const Index = () => {
               </div>
             </DrawerContent>
           </Drawer>
-          <h1 className="text-xl font-poppins font-semibold ml-2">Echoes of India</h1>
+          <h1 className="text-xl font-poppins font-semibold ml-2">A.R.C.H</h1>
         </div>
-        {user.role === "admin" && (
+        {isAdmin && (
           <Button 
             variant="outline" 
             size="sm" 
@@ -115,83 +184,61 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Featured Section */}
+        {/* Categories Section */}
         <section className="mb-8">
-          <h2 className="text-lg font-semibold mb-4">Featured Destinations</h2>
-          <div className="grid grid-cols-1 gap-4">
-            {featured.map(item => (
+          <h2 className="text-lg font-semibold mb-4">Explore Categories</h2>
+          <div className="grid grid-cols-2 gap-4">
+            {categories.slice(0, 4).map(category => (
               <div 
-                key={item.id}
-                className="bg-white rounded-lg overflow-hidden shadow-md cursor-pointer"
-                onClick={() => handleItemClick(item.id)}
+                key={category.id}
+                className="bg-white rounded-lg p-4 shadow-sm cursor-pointer hover:shadow-md transition-shadow"
+                onClick={() => handleCategoryClick(category.id)}
               >
-                <img 
-                  src={item.imageUrl} 
-                  alt={item.title} 
-                  className="w-full h-48 object-cover"
+                <div 
+                  className="w-8 h-8 rounded-full mb-2"
+                  style={{ backgroundColor: category.color }}
                 />
-                <div className="p-4">
-                  <div className="flex justify-between items-start">
-                    <h3 className="font-medium">{item.title}</h3>
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <Heart size={18} className="text-gray-400" />
-                    </Button>
+                <h3 className="font-medium text-sm">{category.name}</h3>
+                <p className="text-xs text-gray-500 mt-1">{category.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Featured Locations */}
+        <section className="mb-8">
+          <h2 className="text-lg font-semibold mb-4">Featured Locations</h2>
+          {featured.length > 0 ? (
+            <div className="space-y-4">
+              {featured.map(item => (
+                <div 
+                  key={item.id}
+                  className="bg-white rounded-lg overflow-hidden shadow-md cursor-pointer"
+                  onClick={() => handleItemClick(item.id)}
+                >
+                  <img 
+                    src={item.image_url || "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?q=80&w=1000"} 
+                    alt={item.title} 
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-4">
+                    <div className="flex justify-between items-start">
+                      <h3 className="font-medium">{item.title}</h3>
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <Heart size={18} className="text-gray-400" />
+                      </Button>
+                    </div>
+                    <p className="text-gray-500 text-sm">{item.location_city}, {item.location_state}</p>
+                    <p className="text-sm mt-2 line-clamp-2">{item.short_description}</p>
                   </div>
-                  <p className="text-gray-500 text-sm">{item.location.city}, {item.location.state}</p>
-                  <p className="text-sm mt-2 line-clamp-2">{item.shortDescription}</p>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Trending Section */}
-        <section className="mb-8">
-          <h2 className="text-lg font-semibold mb-4">Trending Now</h2>
-          <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4">
-            {trending.map(item => (
-              <div 
-                key={item.id}
-                className="flex-shrink-0 w-60 bg-white rounded-lg overflow-hidden shadow-md cursor-pointer"
-                onClick={() => handleItemClick(item.id)}
-              >
-                <img 
-                  src={item.imageUrl} 
-                  alt={item.title} 
-                  className="w-full h-32 object-cover"
-                />
-                <div className="p-3">
-                  <h3 className="font-medium text-sm">{item.title}</h3>
-                  <p className="text-gray-500 text-xs">{item.location.city}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Recently Added */}
-        <section>
-          <h2 className="text-lg font-semibold mb-4">Recently Added</h2>
-          <div className="space-y-4">
-            {recent.map(item => (
-              <div 
-                key={item.id}
-                className="flex bg-white rounded-lg overflow-hidden shadow-sm cursor-pointer"
-                onClick={() => handleItemClick(item.id)}
-              >
-                <img 
-                  src={item.imageUrl} 
-                  alt={item.title} 
-                  className="w-24 h-24 object-cover"
-                />
-                <div className="p-3 flex-1">
-                  <h3 className="font-medium text-sm">{item.title}</h3>
-                  <p className="text-gray-500 text-xs">{item.location.city}, {item.location.state}</p>
-                  <p className="text-xs mt-1 line-clamp-2">{item.shortDescription}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-gray-500">No heritage locations found. Check back later!</p>
+            </div>
+          )}
         </section>
       </main>
 
