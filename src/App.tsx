@@ -23,16 +23,27 @@ const queryClient = new QueryClient();
 
 const App = () => {
   const [isFirstVisit, setIsFirstVisit] = useState(true);
+  const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
     // Check if this is the first visit
     const hasVisited = localStorage.getItem("has_visited_arch");
     if (hasVisited) {
       setIsFirstVisit(false);
+      setShowSplash(false);
     } else {
       localStorage.setItem("has_visited_arch", "true");
+      // Show splash screen for 3 seconds for first-time visitors
+      setTimeout(() => {
+        setShowSplash(false);
+      }, 3000);
     }
   }, []);
+
+  // Show splash screen for first-time visitors
+  if (isFirstVisit && showSplash) {
+    return <SplashScreen />;
+  }
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -42,7 +53,6 @@ const App = () => {
           <Sonner />
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/splash" element={<SplashScreen />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/details/:id" element={<Details />} />
             <Route path="/admin" element={<Admin />} />
@@ -50,14 +60,7 @@ const App = () => {
             <Route path="/search" element={<Search />} />
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/profile" element={<Profile />} />
-            
-            {/* Initial redirection based on first visit */}
-            <Route 
-              path="*" 
-              element={
-                isFirstVisit ? <Navigate to="/splash" /> : <NotFound />
-              } 
-            />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
       </TooltipProvider>
