@@ -35,7 +35,7 @@ const Index = () => {
 
   useEffect(() => {
     if (!loading && !user) {
-      navigate("/splash");
+      navigate("/auth");
       return;
     }
 
