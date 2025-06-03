@@ -70,6 +70,14 @@ export default {
 					lightest: '#A43207',
 					superlight: '#C75528',
 					ultralight: '#E9876A'
+				},
+				accent: {
+					DEFAULT: '#CB8567',
+					light: '#D49682',
+					lighter: '#DDA79E',
+					lightest: '#E6B8B9',
+					dark: '#B8744C',
+					darker: '#A56341'
 				}
 			},
 			borderRadius: {
