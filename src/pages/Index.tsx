@@ -31,17 +31,23 @@ const Index = () => {
   const [featured, setFeatured] = useState<HeritageLocation[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
+  const [isGuest, setIsGuest] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loading && !user) {
+    // Check for guest mode
+    const guestMode = localStorage.getItem('guest_mode');
+    if (guestMode === 'true') {
+      setIsGuest(true);
+    }
+
+    if (!loading && !user && !guestMode) {
       navigate("/auth");
       return;
     }
 
-    if (user) {
-      fetchData();
-    }
+    // Fetch data regardless of auth status for guest users
+    fetchData();
   }, [loading, user, navigate]);
 
   const fetchData = async () => {
@@ -87,8 +93,14 @@ const Index = () => {
   };
 
   const handleLogout = async () => {
-    await signOut();
-    navigate("/auth");
+    if (isGuest) {
+      localStorage.removeItem('guest_mode');
+      setIsGuest(false);
+      navigate("/auth");
+    } else {
+      await signOut();
+      navigate("/auth");
+    }
   };
 
   const handleItemClick = (id: string) => {
@@ -107,8 +119,6 @@ const Index = () => {
     );
   }
 
-  if (!user) return null;
-
   return (
     <div className="pb-20 min-h-screen bg-gray-50">
       {/* Header */}
@@ -123,8 +133,12 @@ const Index = () => {
             <DrawerContent className="h-[85vh]">
               <div className="p-4">
                 <div className="py-6 border-b mb-4">
-                  <h2 className="text-xl font-semibold">{user.user_metadata?.full_name || user.email}</h2>
-                  <p className="text-gray-500 text-sm">{user.email}</p>
+                  <h2 className="text-xl font-semibold">
+                    {isGuest ? "Guest User" : (user?.user_metadata?.full_name || user?.email)}
+                  </h2>
+                  <p className="text-gray-500 text-sm">
+                    {isGuest ? "Limited access - Sign up for full features" : (user?.email || "")}
+                  </p>
                 </div>
                 
                 <div className="space-y-4">
@@ -145,12 +159,22 @@ const Index = () => {
                     </div>
                   ))}
                   
+                  {isGuest && (
+                    <Button 
+                      variant="default" 
+                      className="w-full mt-6 bg-arch hover:bg-arch-light"
+                      onClick={() => navigate("/auth")}
+                    >
+                      Sign Up for Full Access
+                    </Button>
+                  )}
+                  
                   <Button 
                     variant="outline" 
                     className="w-full mt-6"
                     onClick={handleLogout}
                   >
-                    Logout
+                    {isGuest ? "Go to Login" : "Logout"}
                   </Button>
                 </div>
               </div>
@@ -158,7 +182,7 @@ const Index = () => {
           </Drawer>
           <h1 className="text-xl font-poppins font-semibold ml-2">A.R.C.H</h1>
         </div>
-        {isAdmin && (
+        {!isGuest && isAdmin && (
           <Button 
             variant="outline" 
             size="sm" 

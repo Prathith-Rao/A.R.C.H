@@ -30,6 +30,7 @@ const Auth = () => {
     setAuthLoading(true);
 
     try {
+      // Sign up without email confirmation
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -37,21 +38,17 @@ const Auth = () => {
           data: {
             full_name: fullName,
           },
-          emailRedirectTo: `${window.location.origin}/`
+          emailRedirectTo: undefined // Remove email confirmation
         }
       });
 
       if (error) throw error;
 
-      if (data.user && !data.user.email_confirmed_at) {
-        toast({
-          title: "Check your email!",
-          description: "We've sent you a confirmation link to complete your registration.",
-        });
-      } else {
+      // Automatically sign in after successful signup
+      if (data.user) {
         toast({
           title: "Account created successfully!",
-          description: "Welcome to A.R.C.H!",
+          description: "Welcome to A.R.C.H! You are now signed in.",
         });
         navigate("/");
       }
@@ -89,8 +86,6 @@ const Auth = () => {
       
       if (error.message.includes("Invalid login credentials")) {
         errorMessage = "Invalid email or password. Please check your credentials and try again.";
-      } else if (error.message.includes("Email not confirmed")) {
-        errorMessage = "Please check your email and click the confirmation link before signing in.";
       }
       
       toast({
@@ -104,8 +99,8 @@ const Auth = () => {
   };
 
   const handleGuestAccess = () => {
-    // For guest access, simply navigate to the main page
-    // The app will handle the guest state properly
+    // Set a guest flag and navigate to home
+    localStorage.setItem('guest_mode', 'true');
     toast({
       title: "Continuing as guest",
       description: "You can explore the app, but some features require an account.",
@@ -254,6 +249,16 @@ const Auth = () => {
               <p className="text-xs text-gray-500 text-center mt-2">
                 Guest access provides limited functionality
               </p>
+            </div>
+
+            {/* Admin Access Link */}
+            <div className="mt-4 text-center">
+              <button
+                onClick={() => navigate("/admin-auth")}
+                className="text-xs text-gray-400 hover:text-gray-600 transition-colors underline"
+              >
+                Admin Login
+              </button>
             </div>
           </div>
         </div>

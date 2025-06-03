@@ -12,6 +12,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./components/SplashScreen";
 import Auth from "./pages/Auth";
+import AdminAuth from "./pages/AdminAuth";
 import Details from "./pages/Details";
 import Admin from "./pages/Admin";
 import Explore from "./pages/Explore";
@@ -54,6 +55,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/admin-auth" element={<AdminAuth />} />
             <Route path="/splash" element={<SplashScreen />} />
             <Route path="/details/:id" element={<Details />} />
             <Route path="/admin" element={<Admin />} />
