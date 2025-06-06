@@ -12,6 +12,38 @@ import {
   culturalElements 
 } from "@/data/heritageData";
 
+interface ArchitectureCategory {
+  name: string;
+  icon: string;
+  description: string;
+}
+
+interface ArtCategory {
+  name: string;
+  region: string;
+  description: string;
+}
+
+interface TimelinePeriod {
+  name: string;
+  period: string;
+  description: string;
+  highlights: string[];
+}
+
+interface Battle {
+  name: string;
+  years: string;
+  description: string;
+  significance: string;
+}
+
+interface CulturalElement {
+  name: string;
+  icon: string;
+  description: string;
+}
+
 const Details = () => {
   const { category, id } = useParams();
   const navigate = useNavigate();
@@ -21,35 +53,35 @@ const Details = () => {
     
     switch (category) {
       case 'architecture':
-        const arch = architectureCategories[index];
+        const arch = architectureCategories[index] as ArchitectureCategory;
         return {
           title: arch?.name || 'Architecture',
           data: arch,
           type: 'architecture'
         };
       case 'art':
-        const art = artCategories[index];
+        const art = artCategories[index] as ArtCategory;
         return {
           title: art?.name || 'Art Style',
           data: art,
           type: 'art'
         };
       case 'timeline':
-        const period = timelinePeriods[index];
+        const period = timelinePeriods[index] as TimelinePeriod;
         return {
           title: period?.name || 'Historical Period',
           data: period,
           type: 'timeline'
         };
       case 'battles':
-        const battle = famousBattles[index];
+        const battle = famousBattles[index] as Battle;
         return {
           title: battle?.name || 'Historic Battle',
           data: battle,
           type: 'battle'
         };
       case 'culture':
-        const culture = culturalElements[index];
+        const culture = culturalElements[index] as CulturalElement;
         return {
           title: culture?.name || 'Cultural Element',
           data: culture,
@@ -100,22 +132,24 @@ const Details = () => {
           <Card className="bg-accent/10 border-accent/20">
             <CardHeader>
               <CardTitle className="text-accent flex items-center gap-3">
-                {type === 'architecture' && <span className="text-2xl">{data.icon}</span>}
+                {(type === 'architecture' || type === 'culture') && (
+                  <span className="text-2xl">{(data as ArchitectureCategory | CulturalElement).icon}</span>
+                )}
                 {title}
               </CardTitle>
               {type === 'art' && (
                 <CardDescription className="text-accent-light">
-                  Region: {data.region}
+                  Region: {(data as ArtCategory).region}
                 </CardDescription>
               )}
               {type === 'timeline' && (
                 <CardDescription className="text-accent-light">
-                  Period: {data.period}
+                  Period: {(data as TimelinePeriod).period}
                 </CardDescription>
               )}
               {type === 'battle' && (
                 <CardDescription className="text-accent-light">
-                  Year(s): {data.years}
+                  Year(s): {(data as Battle).years}
                 </CardDescription>
               )}
             </CardHeader>
@@ -125,11 +159,11 @@ const Details = () => {
               </p>
 
               {/* Type-specific content */}
-              {type === 'timeline' && data.highlights && (
+              {type === 'timeline' && (data as TimelinePeriod).highlights && (
                 <div>
                   <h3 className="text-accent font-semibold mb-2">Key Highlights:</h3>
                   <ul className="space-y-1">
-                    {data.highlights.map((highlight, index) => (
+                    {(data as TimelinePeriod).highlights.map((highlight, index) => (
                       <li key={index} className="text-accent-light text-sm flex items-center">
                         <span className="w-2 h-2 bg-accent rounded-full mr-3"></span>
                         {highlight}
@@ -139,16 +173,10 @@ const Details = () => {
                 </div>
               )}
 
-              {type === 'battle' && data.significance && (
+              {type === 'battle' && (data as Battle).significance && (
                 <div>
                   <h3 className="text-accent font-semibold mb-2">Historical Significance:</h3>
-                  <p className="text-accent-light text-sm">{data.significance}</p>
-                </div>
-              )}
-
-              {type === 'culture' && (
-                <div className="text-center">
-                  <span className="text-6xl">{data.icon}</span>
+                  <p className="text-accent-light text-sm">{(data as Battle).significance}</p>
                 </div>
               )}
             </CardContent>

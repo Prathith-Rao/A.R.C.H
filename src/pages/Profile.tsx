@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { LogOut, User, Settings, HelpCircle, Info, Edit } from "lucide-react";
 import BottomNavigation from "@/components/BottomNavigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/components/ui/use-toast";
 
 interface UserProfile {
@@ -23,8 +22,8 @@ const Profile = () => {
     full_name: "",
     bio: "",
   });
-  const [loading, setLoading] = useState(true);
-  const { user, signOut, isAdmin } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,32 +32,18 @@ const Profile = () => {
       return;
     }
     
-    fetchProfile();
+    // Initialize profile with user data
+    setProfile({
+      id: user.id,
+      full_name: user.fullName,
+      bio: "",
+      avatar_url: ""
+    });
+    setEditForm({
+      full_name: user.fullName,
+      bio: "",
+    });
   }, [user, navigate]);
-
-  const fetchProfile = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user?.id)
-        .single();
-
-      if (error && error.code !== 'PGRST116') throw error;
-
-      if (data) {
-        setProfile(data);
-        setEditForm({
-          full_name: data.full_name || "",
-          bio: data.bio || "",
-        });
-      }
-    } catch (error) {
-      console.error('Error fetching profile:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleLogout = async () => {
     await signOut();
@@ -71,20 +56,15 @@ const Profile = () => {
 
   const handleSaveProfile = async () => {
     try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .upsert({
-          id: user?.id,
-          full_name: editForm.full_name,
-          bio: editForm.bio,
-          updated_at: new Date().toISOString(),
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      setProfile(data);
+      // Update local profile state
+      const updatedProfile = {
+        id: user?.id || "",
+        full_name: editForm.full_name,
+        bio: editForm.bio,
+        avatar_url: ""
+      };
+      
+      setProfile(updatedProfile);
       setIsEditing(false);
       toast({
         title: "Profile updated",
@@ -98,14 +78,6 @@ const Profile = () => {
       });
     }
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse-slow">Loading...</div>
-      </div>
-    );
-  }
 
   if (!user) return null;
 
@@ -165,16 +137,11 @@ const Profile = () => {
               ) : (
                 <div>
                   <h2 className="text-xl font-medium">
-                    {profile?.full_name || user.user_metadata?.full_name || user.email}
+                    {profile?.full_name || user.fullName || user.email}
                   </h2>
                   <p className="text-gray-500">{user.email}</p>
                   {profile?.bio && (
                     <p className="text-sm mt-2 text-gray-600">{profile.bio}</p>
-                  )}
-                  {isAdmin && (
-                    <p className="text-xs bg-india-saffron/10 text-india-deepSaffron px-2 py-1 rounded mt-2 inline-block">
-                      Administrator
-                    </p>
                   )}
                 </div>
               )}
@@ -188,16 +155,6 @@ const Profile = () => {
           </div>
           
           <div className="divide-y">
-            {isAdmin && (
-              <button 
-                className="w-full flex items-center p-4 hover:bg-gray-50 text-left"
-                onClick={() => navigate("/admin")}
-              >
-                <Settings size={20} className="mr-3 text-gray-500" />
-                <span>Admin Panel</span>
-              </button>
-            )}
-            
             <button 
               className="w-full flex items-center p-4 hover:bg-gray-50 text-left"
               onClick={() => {

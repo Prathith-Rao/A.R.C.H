@@ -10,9 +10,9 @@ const Explore = () => {
   const [activeTab, setActiveTab] = useState("states");
   
   // Gather unique values
-  const states = [...new Set(mockHeritageData.map(item => item.location.state))];
-  const categories = [...new Set(mockHeritageData.map(item => item.category))];
-  const eras = [...new Set(mockHeritageData.map(item => item.era))];
+  const states: string[] = [...new Set(mockHeritageData.map(item => item.location.state))];
+  const categories: string[] = [...new Set(mockHeritageData.map(item => item.category))];
+  const eras: string[] = [...new Set(mockHeritageData.map(item => item.era))];
   
   return (
     <div className="pb-20 min-h-screen bg-gray-50">
@@ -32,7 +32,7 @@ const Explore = () => {
           
           <TabsContent value="states" className="mt-4">
             <div className="grid grid-cols-2 gap-4">
-              {states.map(state => (
+              {states.map((state: string) => (
                 <div 
                   key={state}
                   className="bg-white rounded-lg shadow-sm p-4 cursor-pointer hover:shadow-md transition-shadow"
@@ -49,7 +49,7 @@ const Explore = () => {
           
           <TabsContent value="categories" className="mt-4">
             <div className="grid grid-cols-2 gap-4">
-              {categories.map(category => (
+              {categories.map((category: string) => (
                 <div 
                   key={category}
                   className="bg-white rounded-lg shadow-sm p-4 cursor-pointer hover:shadow-md transition-shadow"
@@ -66,7 +66,7 @@ const Explore = () => {
           
           <TabsContent value="eras" className="mt-4">
             <div className="grid grid-cols-2 gap-4">
-              {eras.map(era => (
+              {eras.map((era: string) => (
                 <div 
                   key={era}
                   className="bg-white rounded-lg shadow-sm p-4 cursor-pointer hover:shadow-md transition-shadow"
@@ -92,7 +92,7 @@ const Explore = () => {
           {/* Display recommended items based on active tab */}
           {(activeTab === "states" ? states.slice(0, 3) : 
             activeTab === "categories" ? categories.slice(0, 3) : 
-            eras.slice(0, 3)).map(item => {
+            eras.slice(0, 3)).map((item: string) => {
             
             const filteredItems = activeTab === "states" 
               ? mockHeritageData.filter(i => i.location.state === item)

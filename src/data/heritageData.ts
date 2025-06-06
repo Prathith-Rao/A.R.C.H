@@ -114,3 +114,47 @@ export const timelinePeriods = [
     highlights: ["Democratic republic", "Economic growth", "Technological advancement"]
   }
 ];
+
+// Mock heritage data for exploration features
+export interface HeritageItem {
+  id: string;
+  title: string;
+  location: {
+    state: string;
+    city: string;
+  };
+  category: string;
+  era: string;
+  imageUrl: string;
+  description: string;
+}
+
+export const mockHeritageData: HeritageItem[] = [
+  {
+    id: "1",
+    title: "Taj Mahal",
+    location: { state: "Uttar Pradesh", city: "Agra" },
+    category: "Tombs",
+    era: "Mughal Empire",
+    imageUrl: "https://images.unsplash.com/photo-1564507592333-c60657eea523?q=80&w=1000",
+    description: "Iconic marble mausoleum built by Shah Jahan"
+  },
+  {
+    id: "2", 
+    title: "Red Fort",
+    location: { state: "Delhi", city: "Delhi" },
+    category: "Forts",
+    era: "Mughal Empire",
+    imageUrl: "https://images.unsplash.com/photo-1587474260584-136574528045?q=80&w=1000",
+    description: "Historic fortified palace of the Mughal emperors"
+  },
+  {
+    id: "3",
+    title: "Mysore Palace",
+    location: { state: "Karnataka", city: "Mysore" },
+    category: "Palaces", 
+    era: "British Colonial Era",
+    imageUrl: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1000",
+    description: "Royal residence of the Wadiyar dynasty"
+  }
+];
