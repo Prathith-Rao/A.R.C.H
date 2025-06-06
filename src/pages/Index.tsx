@@ -53,7 +53,7 @@ const Index = () => {
     }
   ];
 
-  // Create a properly typed featured items array
+  // Create a properly typed featured items array with proper type checking
   const featuredItems = [
     ...architectureCategories.flatMap(cat => 
       cat.examples?.slice(0, 1).map(ex => ({
@@ -66,7 +66,7 @@ const Index = () => {
       cat.examples?.slice(0, 1).map(ex => ({
         ...ex,
         categoryType: 'art',
-        locationText: ex.artist || ex.region || 'Cultural Heritage'
+        locationText: 'artist' in ex ? ex.artist : ('region' in ex ? ex.region : 'Cultural Heritage')
       })) || []
     ),
     ...timelinePeriods.flatMap(period => 

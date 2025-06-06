@@ -4,9 +4,11 @@ import BottomNavigation from "@/components/BottomNavigation";
 import { Input } from "@/components/ui/input";
 import { Search as SearchIcon } from "lucide-react";
 import { mockHeritageData, HeritageItem } from "@/data/heritageData";
+import { useNavigate } from "react-router-dom";
 
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   const filteredResults = useMemo(() => {
     if (!searchQuery.trim()) return [];
@@ -102,6 +104,7 @@ const Search = () => {
                     key={item.id}
                     className="bg-accent/10 border border-accent/20 rounded-lg p-4 hover:bg-accent/20 transition-all duration-300 cursor-pointer hover-lift group animate-fade-in"
                     style={{ animationDelay: `${index * 0.1}s` }}
+                    onClick={() => navigate(`/details/${item.category}/${item.id}`)}
                   >
                     <div className="flex gap-4">
                       <div className="w-20 h-20 overflow-hidden rounded-md">
