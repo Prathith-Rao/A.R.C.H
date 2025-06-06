@@ -1,3 +1,4 @@
+
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "@/pages/Index";
@@ -10,6 +11,7 @@ import Details from "@/pages/Details";
 import NotFound from "@/pages/NotFound";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Examples from "@/pages/Examples";
+import ItemDetail from "@/pages/ItemDetail";
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/details/:category/:id" element={<Details />} />
             <Route path="/examples/:category" element={<Examples />} />
+            <Route path="/item/:category/:id" element={<ItemDetail />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
