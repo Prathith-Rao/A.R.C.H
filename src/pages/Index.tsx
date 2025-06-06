@@ -53,10 +53,29 @@ const Index = () => {
     }
   ];
 
+  // Create a properly typed featured items array
   const featuredItems = [
-    ...architectureCategories.flatMap(cat => cat.examples?.slice(0, 1) || []),
-    ...artCategories.flatMap(cat => cat.examples?.slice(0, 1) || []),
-    ...timelinePeriods.flatMap(period => period.examples?.slice(0, 1) || [])
+    ...architectureCategories.flatMap(cat => 
+      cat.examples?.slice(0, 1).map(ex => ({
+        ...ex,
+        categoryType: 'architecture',
+        locationText: ex.location || 'Historical Site'
+      })) || []
+    ),
+    ...artCategories.flatMap(cat => 
+      cat.examples?.slice(0, 1).map(ex => ({
+        ...ex,
+        categoryType: 'art',
+        locationText: ex.artist || ex.region || 'Cultural Heritage'
+      })) || []
+    ),
+    ...timelinePeriods.flatMap(period => 
+      period.examples?.slice(0, 1).map(ex => ({
+        ...ex,
+        categoryType: 'timeline',
+        locationText: 'Historical Period'
+      })) || []
+    )
   ].slice(0, 6);
 
   return (
@@ -120,10 +139,7 @@ const Index = () => {
                 className="bg-accent/10 border-accent/20 overflow-hidden hover:bg-accent/20 transition-all duration-300 cursor-pointer hover-lift group animate-fade-in"
                 style={{ animationDelay: `${0.8 + index * 0.1}s` }}
                 onClick={() => {
-                  // Navigate to individual item detail page
-                  const category = architectureCategories.some(cat => cat.examples?.includes(item)) ? 'architecture' :
-                                 artCategories.some(cat => cat.examples?.includes(item)) ? 'art' : 'timeline';
-                  navigate(`/item/${category}/${item.id}`);
+                  navigate(`/item/${item.categoryType}/${item.id}`);
                 }}
               >
                 <div className="aspect-video overflow-hidden">
@@ -138,7 +154,7 @@ const Index = () => {
                     {item.name}
                   </CardTitle>
                   <CardDescription className="text-accent-light">
-                    {item.location || item.region || 'Cultural Heritage'}
+                    {item.locationText}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
