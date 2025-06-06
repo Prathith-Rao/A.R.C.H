@@ -3,14 +3,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { Eye, EyeOff } from "lucide-react";
 
 const Auth = () => {
   const navigate = useNavigate();
-  const { user, loading } = useAuth();
+  const { user, loading, signIn, signUp } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,42 +18,33 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    // Redirect if user is already logged in
     if (!loading && user) {
       navigate("/");
     }
   }, [user, loading, navigate]);
 
-  const handleSignUp = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthLoading(true);
 
     try {
-      // Sign up without email confirmation
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName,
-          },
-          emailRedirectTo: undefined // Remove email confirmation
-        }
-      });
-
-      if (error) throw error;
-
-      // Automatically sign in after successful signup
-      if (data.user) {
+      if (isLogin) {
+        await signIn(email, password);
+        toast({
+          title: "Welcome back!",
+          description: "You have successfully logged in.",
+        });
+      } else {
+        await signUp(email, password, fullName);
         toast({
           title: "Account created successfully!",
-          description: "Welcome to A.R.C.H! You are now signed in.",
+          description: "Welcome to A.R.C.H!",
         });
-        navigate("/");
       }
+      navigate("/");
     } catch (error: any) {
       toast({
-        title: "Error creating account",
+        title: `Error ${isLogin ? 'signing in' : 'creating account'}`,
         description: error.message,
         variant: "destructive",
       });
@@ -63,54 +53,15 @@ const Auth = () => {
     }
   };
 
-  const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setAuthLoading(true);
-
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "Welcome back!",
-        description: "You have successfully logged in.",
-      });
-      
-      navigate("/");
-    } catch (error: any) {
-      let errorMessage = error.message;
-      
-      if (error.message.includes("Invalid login credentials")) {
-        errorMessage = "Invalid email or password. Please check your credentials and try again.";
-      }
-      
-      toast({
-        title: "Error signing in",
-        description: errorMessage,
-        variant: "destructive",
-      });
-    } finally {
-      setAuthLoading(false);
-    }
-  };
-
   const handleGuestAccess = () => {
-    // Set a guest flag and navigate to home
     localStorage.setItem('guest_mode', 'true');
     toast({
       title: "Continuing as guest",
-      description: "You can explore the app, but some features require an account.",
+      description: "You can explore the app with limited features.",
     });
     navigate("/");
   };
 
-  const handleSubmit = isLogin ? handleSignIn : handleSignUp;
-
-  // Show loading spinner while checking auth state
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-arch to-arch-lighter flex items-center justify-center">
@@ -128,7 +79,7 @@ const Auth = () => {
       {/* Header */}
       <div className="h-40 bg-gradient-to-r from-white/10 to-white/20 backdrop-blur-sm flex items-center justify-center animate-slide-in-bottom">
         <div className="text-center">
-          <h1 className="text-white text-4xl font-poppins font-bold mb-2 animate-float">A.R.C.H</h1>
+          <h1 className="text-white text-4xl font-bold mb-2 animate-float">A.R.C.H</h1>
           <p className="text-white/80 text-sm">Architectural & Cultural Heritage of India</p>
         </div>
       </div>
@@ -250,24 +201,7 @@ const Auth = () => {
                 Guest access provides limited functionality
               </p>
             </div>
-
-            {/* Admin Access Link */}
-            <div className="mt-4 text-center">
-              <button
-                onClick={() => navigate("/admin-auth")}
-                className="text-xs text-gray-400 hover:text-gray-600 transition-colors underline"
-              >
-                Admin Login
-              </button>
-            </div>
           </div>
-        </div>
-        
-        {/* Additional Info */}
-        <div className="mt-8 text-center animate-fade-in" style={{ animationDelay: "200ms" }}>
-          <p className="text-white/70 text-sm">
-            Discover India's rich architectural and cultural heritage
-          </p>
         </div>
       </div>
     </div>

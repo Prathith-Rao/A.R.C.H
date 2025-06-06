@@ -2,8 +2,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { AuthProvider } from "@/contexts/AuthContext";
 
@@ -12,15 +11,8 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./components/SplashScreen";
 import Auth from "./pages/Auth";
-import AdminAuth from "./pages/AdminAuth";
-import Details from "./pages/Details";
-import Admin from "./pages/Admin";
 import Explore from "./pages/Explore";
-import Search from "./pages/Search";
-import Favorites from "./pages/Favorites";
-import Profile from "./pages/Profile";
-
-const queryClient = new QueryClient();
+import Details from "./pages/Details";
 
 const App = () => {
   const [isFirstVisit, setIsFirstVisit] = useState(true);
@@ -48,27 +40,19 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-arch">
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <AuthProvider>
-            <Toaster />
-            <Sonner />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/admin-auth" element={<AdminAuth />} />
-              <Route path="/splash" element={<SplashScreen />} />
-              <Route path="/details/:id" element={<Details />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/explore" element={<Explore />} />
-              <Route path="/search" element={<Search />} />
-              <Route path="/favorites" element={<Favorites />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </AuthProvider>
-        </TooltipProvider>
-      </QueryClientProvider>
+      <TooltipProvider>
+        <AuthProvider>
+          <Toaster />
+          <Sonner />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/details/:category/:id" element={<Details />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
+      </TooltipProvider>
     </div>
   );
 };

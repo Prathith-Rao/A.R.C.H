@@ -1,21 +1,22 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import BottomNavigation from "@/components/BottomNavigation";
-import AdminSetup from "@/components/AdminSetup";
-import { MapPin, Users, Settings, LogOut, Shield } from "lucide-react";
+import { MapPin, LogOut, Palette, History, Castle } from "lucide-react";
+import { architectureCategories, artCategories, timelinePeriods } from "@/data/heritageData";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { user, loading, signOut, isAdmin } = useAuth();
-  const [showAdminSetup, setShowAdminSetup] = useState(false);
+  const { user, loading, signOut } = useAuth();
+  const isGuest = localStorage.getItem('guest_mode') === 'true';
 
   const handleSignOut = async () => {
     try {
-      await signOut();
+      signOut();
+      localStorage.removeItem('guest_mode');
     } catch (error) {
       console.error('Error signing out:', error);
     }
@@ -45,8 +46,8 @@ const Index = () => {
       
       {/* Main Content */}
       <div className="flex-1 px-6 py-8 pb-20">
-        {!user ? (
-          // Guest Content
+        {!user && !isGuest ? (
+          // Not logged in content
           <div className="max-w-md mx-auto space-y-6">
             <Card className="bg-accent/10 border-accent/20 animate-scale-in">
               <CardHeader className="text-center">
@@ -71,82 +72,134 @@ const Index = () => {
                 </Button>
               </CardContent>
             </Card>
-
-            {/* Admin Setup Section */}
-            <Card className="bg-accent/5 border-accent/20">
-              <CardHeader className="text-center">
-                <CardTitle className="text-accent flex items-center justify-center gap-2">
-                  <Shield size={20} />
-                  Admin Setup
-                </CardTitle>
-                <CardDescription className="text-accent-light">
-                  First time? Create your admin account to manage content
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {!showAdminSetup ? (
-                  <Button 
-                    onClick={() => setShowAdminSetup(true)}
-                    variant="outline"
-                    className="w-full border-accent/30 text-accent hover:bg-accent/10"
-                  >
-                    Set Up Admin Account
-                  </Button>
-                ) : (
-                  <div className="space-y-4">
-                    <AdminSetup />
-                    <Button 
-                      onClick={() => setShowAdminSetup(false)}
-                      variant="ghost"
-                      className="w-full text-accent-light hover:text-accent"
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
           </div>
         ) : (
-          // Authenticated User Content
-          <div className="max-w-md mx-auto space-y-6">
+          // Logged in or guest content
+          <div className="max-w-4xl mx-auto space-y-8">
+            {/* Welcome Section */}
             <Card className="bg-accent/10 border-accent/20 animate-scale-in">
               <CardHeader className="text-center">
-                <CardTitle className="text-accent">Welcome back!</CardTitle>
+                <CardTitle className="text-accent">
+                  {user ? `Welcome back, ${user.fullName}!` : 'Welcome, Guest!'}
+                </CardTitle>
                 <CardDescription className="text-accent-light">
-                  Ready to explore India's heritage?
+                  Explore India's rich cultural heritage
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="flex flex-wrap gap-4 justify-center">
                 <Button 
                   onClick={() => navigate("/explore")} 
-                  className="w-full arch-gradient text-arch font-medium hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5"
+                  className="arch-gradient text-arch font-medium hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5"
                 >
                   <MapPin size={18} className="mr-2" />
-                  Explore Heritage Sites
+                  Explore Heritage
                 </Button>
                 
-                {isAdmin && (
+                {user && (
                   <Button 
-                    onClick={() => navigate("/admin")} 
+                    onClick={handleSignOut}
                     variant="outline"
-                    className="w-full border-accent/30 text-accent hover:bg-accent/10 transition-all duration-200"
+                    className="border-accent/30 text-accent hover:bg-accent/10"
                   >
-                    <Settings size={18} className="mr-2" />
-                    Admin Panel
+                    <LogOut size={18} className="mr-2" />
+                    Sign Out
                   </Button>
                 )}
-                
-                <Button 
-                  onClick={handleSignOut}
-                  variant="ghost"
-                  className="w-full text-accent-light hover:text-accent hover:bg-accent/5"
-                >
-                  <LogOut size={18} className="mr-2" />
-                  Sign Out
-                </Button>
               </CardContent>
             </Card>
+
+            {/* Categories Preview */}
+            <div className="grid gap-6">
+              {/* Architecture */}
+              <Card className="bg-accent/5 border-accent/20">
+                <CardHeader>
+                  <CardTitle className="text-accent flex items-center gap-2">
+                    <Castle size={24} />
+                    Architecture Categories
+                  </CardTitle>
+                  <CardDescription className="text-accent-light">
+                    Explore different architectural styles across India
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {architectureCategories.slice(0, 6).map((category, index) => (
+                      <Button
+                        key={category.name}
+                        variant="outline"
+                        className="h-auto p-3 border-accent/20 text-accent hover:bg-accent/10 transition-all duration-200"
+                        onClick={() => navigate(`/details/architecture/${index}`)}
+                      >
+                        <div className="text-center">
+                          <div className="text-2xl mb-1">{category.icon}</div>
+                          <div className="text-sm font-medium">{category.name}</div>
+                        </div>
+                      </Button>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Art Styles */}
+              <Card className="bg-accent/5 border-accent/20">
+                <CardHeader>
+                  <CardTitle className="text-accent flex items-center gap-2">
+                    <Palette size={24} />
+                    Art & Painting Styles
+                  </CardTitle>
+                  <CardDescription className="text-accent-light">
+                    Traditional art forms from different regions
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {artCategories.slice(0, 4).map((art, index) => (
+                      <Button
+                        key={art.name}
+                        variant="outline"
+                        className="h-auto p-3 border-accent/20 text-accent hover:bg-accent/10 text-left justify-start"
+                        onClick={() => navigate(`/details/art/${index}`)}
+                      >
+                        <div>
+                          <div className="font-medium">{art.name}</div>
+                          <div className="text-xs text-accent-light">{art.region}</div>
+                        </div>
+                      </Button>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Timeline */}
+              <Card className="bg-accent/5 border-accent/20">
+                <CardHeader>
+                  <CardTitle className="text-accent flex items-center gap-2">
+                    <History size={24} />
+                    Historical Timeline
+                  </CardTitle>
+                  <CardDescription className="text-accent-light">
+                    Journey through India's historical periods
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {timelinePeriods.slice(0, 3).map((period, index) => (
+                      <Button
+                        key={period.name}
+                        variant="outline"
+                        className="h-auto p-3 border-accent/20 text-accent hover:bg-accent/10 text-left justify-start w-full"
+                        onClick={() => navigate(`/details/timeline/${index}`)}
+                      >
+                        <div>
+                          <div className="font-medium">{period.name}</div>
+                          <div className="text-xs text-accent-light">{period.period}</div>
+                        </div>
+                      </Button>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         )}
       </div>
