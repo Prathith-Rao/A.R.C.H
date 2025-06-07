@@ -201,7 +201,7 @@ export const timelinePeriods = [
   }
 ];
 
-// Mock heritage data for exploration features
+// Enhanced heritage data interface for better search functionality
 export interface HeritageItem {
   id: string;
   title: string;
@@ -213,8 +213,14 @@ export interface HeritageItem {
   era: string;
   imageUrl: string;
   description: string;
+  keywords?: string[];
+  period?: string;
+  significance?: string;
+  artist?: string;
+  region?: string;
 }
 
+// Enhanced mock heritage data with more comprehensive search fields
 export const mockHeritageData: HeritageItem[] = [
   {
     id: "1",
@@ -223,7 +229,10 @@ export const mockHeritageData: HeritageItem[] = [
     category: "Tombs",
     era: "Mughal Empire",
     imageUrl: "https://images.unsplash.com/photo-1564507592333-c60657eea523?q=80&w=1000",
-    description: "Iconic marble mausoleum built by Shah Jahan"
+    description: "Iconic marble mausoleum built by Shah Jahan",
+    keywords: ["marble", "mausoleum", "Shah Jahan", "Mumtaz Mahal", "UNESCO", "wonder", "love"],
+    period: "1632-1653",
+    significance: "Symbol of eternal love and architectural masterpiece"
   },
   {
     id: "2", 
@@ -232,7 +241,10 @@ export const mockHeritageData: HeritageItem[] = [
     category: "Forts",
     era: "Mughal Empire",
     imageUrl: "https://images.unsplash.com/photo-1587474260584-136574528045?q=80&w=1000",
-    description: "Historic fortified palace of the Mughal emperors"
+    description: "Historic fortified palace of the Mughal emperors",
+    keywords: ["Lal Qila", "fortified", "palace", "emperor", "independence", "flag"],
+    period: "1638-1648",
+    significance: "Symbol of Mughal power and Indian independence"
   },
   {
     id: "3",
@@ -241,6 +253,126 @@ export const mockHeritageData: HeritageItem[] = [
     category: "Palaces", 
     era: "British Colonial Era",
     imageUrl: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1000",
-    description: "Royal residence of the Wadiyar dynasty"
+    description: "Royal residence of the Wadiyar dynasty",
+    keywords: ["royal", "Wadiyar", "Dussehra", "illumination", "architecture"],
+    period: "1912",
+    significance: "Example of Indo-Saracenic architecture"
+  },
+  {
+    id: "4",
+    title: "Meenakshi Temple",
+    location: { state: "Tamil Nadu", city: "Madurai" },
+    category: "Temples",
+    era: "Ancient Period",
+    imageUrl: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1000",
+    description: "Historic Hindu temple with stunning Dravidian architecture",
+    keywords: ["Dravidian", "gopuram", "Hindu", "goddess", "colorful", "ancient"],
+    period: "6th century CE",
+    significance: "Masterpiece of Dravidian temple architecture"
+  },
+  {
+    id: "5",
+    title: "Golden Temple",
+    location: { state: "Punjab", city: "Amritsar" },
+    category: "Temples",
+    era: "Sikh Period",
+    imageUrl: "https://images.unsplash.com/photo-1564507592333-c60657eea523?q=80&w=1000",
+    description: "Holiest Gurdwara of Sikhism with gold-plated architecture",
+    keywords: ["Gurdwara", "Sikh", "gold", "Amrit Sarovar", "langar", "holy"],
+    period: "1604",
+    significance: "Spiritual center of Sikhism"
   }
 ];
+
+// Create a comprehensive search dataset combining all heritage items
+export const getAllHeritageItems = (): HeritageItem[] => {
+  const allItems: HeritageItem[] = [...mockHeritageData];
+
+  // Add items from architecture categories
+  architectureCategories.forEach(category => {
+    category.examples?.forEach(example => {
+      const [city, state] = example.location.split(', ');
+      allItems.push({
+        id: example.id,
+        title: example.name,
+        location: { state: state || 'India', city: city || 'Unknown' },
+        category: category.name,
+        era: 'Historical Period',
+        imageUrl: example.imageUrl,
+        description: example.description,
+        keywords: [category.name.toLowerCase(), 'architecture', 'heritage']
+      });
+    });
+  });
+
+  // Add items from art categories
+  artCategories.forEach(category => {
+    category.examples?.forEach(example => {
+      allItems.push({
+        id: example.id,
+        title: example.name,
+        location: { state: category.region, city: category.region },
+        category: 'Art',
+        era: 'Traditional Period',
+        imageUrl: example.imageUrl,
+        description: example.description,
+        artist: example.artist,
+        region: category.region,
+        keywords: [category.name.toLowerCase(), 'art', 'folk', 'traditional']
+      });
+    });
+  });
+
+  // Add items from timeline periods
+  timelinePeriods.forEach(period => {
+    period.examples?.forEach(example => {
+      allItems.push({
+        id: example.id,
+        title: example.name,
+        location: { state: 'India', city: 'Various' },
+        category: 'Historical Site',
+        era: period.name,
+        imageUrl: example.imageUrl,
+        description: example.description,
+        period: period.period,
+        keywords: [period.name.toLowerCase(), 'historical', 'civilization', 'period']
+      });
+    });
+  });
+
+  // Add items from famous battles
+  famousBattles.forEach(battle => {
+    battle.examples?.forEach(example => {
+      allItems.push({
+        id: example.id,
+        title: example.name,
+        location: { state: 'India', city: 'Battlefield' },
+        category: 'Historical Battle',
+        era: battle.years,
+        imageUrl: example.imageUrl,
+        description: example.description,
+        significance: battle.significance,
+        keywords: [battle.name.toLowerCase(), 'battle', 'war', 'historical']
+      });
+    });
+  });
+
+  // Add items from cultural elements
+  culturalElements.forEach(element => {
+    element.examples?.forEach(example => {
+      allItems.push({
+        id: example.id,
+        title: example.name,
+        location: { state: example.region || 'India', city: example.region || 'Various' },
+        category: element.name,
+        era: 'Cultural Tradition',
+        imageUrl: example.imageUrl,
+        description: example.description,
+        region: example.region,
+        keywords: [element.name.toLowerCase(), 'culture', 'tradition', 'festival']
+      });
+    });
+  });
+
+  return allItems;
+};

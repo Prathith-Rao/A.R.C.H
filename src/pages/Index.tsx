@@ -53,7 +53,7 @@ const Index = () => {
     }
   ];
 
-  // Create a properly typed featured items array with proper type checking
+  // Create featured items with proper type handling
   const featuredItems = [
     ...architectureCategories.flatMap(cat => 
       cat.examples?.slice(0, 1).map(ex => ({
@@ -66,40 +66,40 @@ const Index = () => {
       cat.examples?.slice(0, 1).map(ex => ({
         ...ex,
         categoryType: 'art',
-        locationText: 'artist' in ex ? ex.artist : ('region' in ex ? ex.region : 'Cultural Heritage')
+        locationText: ex.artist || cat.region || 'Cultural Heritage'
       })) || []
     ),
     ...timelinePeriods.flatMap(period => 
       period.examples?.slice(0, 1).map(ex => ({
         ...ex,
         categoryType: 'timeline',
-        locationText: 'Historical Period'
+        locationText: period.period || 'Historical Period'
       })) || []
     )
   ].slice(0, 6);
 
   return (
-    <div className="pb-20 min-h-screen bg-arch text-white animate-fade-in">
+    <div className="pb-20 min-h-screen bg-gradient-to-br from-primary via-primary-dark to-secondary text-white animate-fade-in">
       {/* Header */}
-      <header className="arch-gradient p-6 text-center animate-slide-in-bottom">
-        <h1 className="text-3xl font-bold text-arch mb-2 animate-float">
+      <header className="bg-gradient-to-r from-primary to-primary-light p-6 text-center animate-slide-in-bottom shadow-lg">
+        <h1 className="text-3xl font-bold text-white mb-2 animate-float">
           Heritage Explorer
         </h1>
-        <p className="text-arch/80">Discover the rich cultural heritage around you</p>
+        <p className="text-white/80">Discover the rich cultural heritage around you</p>
       </header>
 
       {/* Main Content */}
       <main className="p-6 space-y-8">
         {/* Categories Grid */}
         <section>
-          <h2 className="text-2xl font-semibold text-accent mb-6 animate-fade-in">
+          <h2 className="text-2xl font-semibold text-white mb-6 animate-fade-in">
             Explore Categories
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {categories.map((category, index) => (
               <Card 
                 key={category.route}
-                className="bg-accent/10 border-accent/20 hover:bg-accent/20 transition-all duration-300 cursor-pointer hover-lift group animate-scale-in"
+                className="bg-white/10 border-white/20 hover:bg-white/20 transition-all duration-300 cursor-pointer hover-lift group animate-scale-in backdrop-blur-sm"
                 style={{ animationDelay: `${index * 0.1}s` }}
                 onClick={() => navigate(`/examples/${category.route}`)}
               >
@@ -107,17 +107,17 @@ const Index = () => {
                   <div className="text-4xl mb-3 group-hover:animate-bounce transition-all duration-300">
                     {category.icon}
                   </div>
-                  <CardTitle className="text-accent group-hover:text-accent-light transition-colors duration-300">
+                  <CardTitle className="text-white group-hover:text-accent-light transition-colors duration-300">
                     {category.title}
                   </CardTitle>
-                  <CardDescription className="text-accent-light">
+                  <CardDescription className="text-white/70">
                     {category.description}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Button 
                     variant="outline" 
-                    className="w-full border-accent/20 text-accent hover:bg-accent/10 hover-scale transition-all duration-300"
+                    className="w-full border-white/20 text-white hover:bg-white/10 hover-scale transition-all duration-300"
                   >
                     Explore Collection
                   </Button>
@@ -129,14 +129,14 @@ const Index = () => {
 
         {/* Featured Items */}
         <section>
-          <h2 className="text-2xl font-semibold text-accent mb-6 animate-fade-in" style={{ animationDelay: "0.6s" }}>
+          <h2 className="text-2xl font-semibold text-white mb-6 animate-fade-in" style={{ animationDelay: "0.6s" }}>
             Featured Heritage
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredItems.map((item, index) => (
               <Card 
                 key={item.id}
-                className="bg-accent/10 border-accent/20 overflow-hidden hover:bg-accent/20 transition-all duration-300 cursor-pointer hover-lift group animate-fade-in"
+                className="bg-white/10 border-white/20 overflow-hidden hover:bg-white/20 transition-all duration-300 cursor-pointer hover-lift group animate-fade-in backdrop-blur-sm"
                 style={{ animationDelay: `${0.8 + index * 0.1}s` }}
                 onClick={() => {
                   navigate(`/item/${item.categoryType}/${item.id}`);
@@ -150,15 +150,15 @@ const Index = () => {
                   />
                 </div>
                 <CardHeader>
-                  <CardTitle className="text-accent text-lg group-hover:text-accent-light transition-colors duration-300">
+                  <CardTitle className="text-white text-lg group-hover:text-accent-light transition-colors duration-300">
                     {item.name}
                   </CardTitle>
-                  <CardDescription className="text-accent-light">
+                  <CardDescription className="text-white/70">
                     {item.locationText}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-accent-light text-sm line-clamp-2">
+                  <p className="text-white/70 text-sm line-clamp-2">
                     {item.description}
                   </p>
                 </CardContent>
@@ -169,20 +169,20 @@ const Index = () => {
 
         {/* Quick Actions */}
         <section className="animate-fade-in" style={{ animationDelay: "1.2s" }}>
-          <Card className="bg-accent/5 border-accent/20">
+          <Card className="bg-white/5 border-white/20 backdrop-blur-sm">
             <CardContent className="p-6">
-              <h3 className="text-accent font-semibold mb-4 text-center">Quick Actions</h3>
+              <h3 className="text-white font-semibold mb-4 text-center">Quick Actions</h3>
               <div className="grid grid-cols-2 gap-4">
                 <Button
                   variant="outline"
-                  className="border-accent/20 text-accent hover:bg-accent/10 hover-scale transition-all duration-300"
+                  className="border-white/20 text-white hover:bg-white/10 hover-scale transition-all duration-300"
                   onClick={() => navigate('/search')}
                 >
                   🔍 Search Heritage
                 </Button>
                 <Button
                   variant="outline"
-                  className="border-accent/20 text-accent hover:bg-accent/10 hover-scale transition-all duration-300"
+                  className="border-white/20 text-white hover:bg-white/10 hover-scale transition-all duration-300"
                   onClick={() => navigate('/favorites')}
                 >
                   ❤️ My Favorites
