@@ -15,7 +15,7 @@ export const architectureCategories = [
         id: "temple-1",
         name: "Meenakshi Temple",
         location: "Madurai, Tamil Nadu",
-        imageUrl: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1000",
+        imageUrl: "https://en.wikipedia.org/wiki/File:Meenakshi_Amman_West_Tower.jpg",
         description: "A historic Hindu temple dedicated to Goddess Meenakshi, known for its stunning Dravidian architecture and colorful gopurams.",
         wikipediaUrl: "https://en.wikipedia.org/wiki/Meenakshi_Temple"
       },
