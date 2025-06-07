@@ -82,7 +82,7 @@ function App() {
   return (
     <AuthProvider>
       <FavoritesProvider>
-        <div className="min-h-screen bg-gradient-to-br from-primary via-primary-dark to-secondary">
+        <div className="min-h-screen bg-background">
           <BrowserRouter>
             <AnimatedRoutes />
           </BrowserRouter>

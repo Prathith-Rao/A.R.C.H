@@ -12,9 +12,9 @@ const Header = () => {
         />
         <div>
           <h1 className="text-3xl font-bold text-white animate-float">
-            Heritage Explorer
+            A.R.C.H
           </h1>
-          <p className="text-white/80">Discover the rich cultural heritage around you</p>
+          <p className="text-white/80">Architectural & Cultural Heritage of India</p>
         </div>
       </div>
     </header>

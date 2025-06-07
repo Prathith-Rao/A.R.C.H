@@ -14,7 +14,7 @@ const Favorites = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary via-primary-dark to-secondary text-white flex items-center justify-center">
+      <div className="min-h-screen bg-background text-white flex items-center justify-center">
         <Card className="bg-white/10 border-white/20 max-w-md">
           <CardContent className="p-6 text-center">
             <h2 className="text-white text-xl font-bold mb-4">Please Login</h2>
@@ -32,7 +32,7 @@ const Favorites = () => {
   }
 
   return (
-    <div className="pb-20 min-h-screen bg-gradient-to-br from-primary via-primary-dark to-secondary text-white animate-fade-in">
+    <div className="pb-20 min-h-screen bg-background text-white animate-fade-in">
       {/* Header */}
       <header className="bg-gradient-to-r from-primary to-primary-light p-6 shadow-lg sticky top-0 z-10 animate-slide-in-bottom">
         <h1 className="text-2xl font-bold text-white animate-float">My Favorites</h1>

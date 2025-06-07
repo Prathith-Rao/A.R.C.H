@@ -82,10 +82,10 @@ const Profile = () => {
   if (!user) return null;
 
   return (
-    <div className="pb-20 min-h-screen bg-gray-50">
+    <div className="pb-20 min-h-screen bg-background">
       {/* Header */}
       <header className="bg-white p-4 shadow-sm flex items-center justify-between sticky top-0 z-10">
-        <h1 className="text-xl font-poppins font-semibold">Profile</h1>
+        <h1 className="text-xl font-poppins font-semibold text-foreground">Profile</h1>
         <Button 
           variant="ghost" 
           size="icon"

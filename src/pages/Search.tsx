@@ -57,7 +57,7 @@ const Search = () => {
   };
 
   return (
-    <div className="pb-20 min-h-screen bg-gradient-to-br from-primary via-primary-dark to-secondary text-white transition-all duration-500 ease-in-out animate-fade-in">
+    <div className="pb-20 min-h-screen bg-background text-white transition-all duration-500 ease-in-out animate-fade-in">
       {/* Header */}
       <header className="bg-gradient-to-r from-primary to-primary-light p-6 shadow-lg sticky top-0 z-10 animate-slide-in-bottom backdrop-blur-sm">
         <h1 className="text-2xl font-bold text-white mb-4 animate-float">Search Heritage</h1>

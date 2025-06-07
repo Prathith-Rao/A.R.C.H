@@ -8,7 +8,7 @@ import QuickActions from "@/components/QuickActions";
 
 const Index = () => {
   return (
-    <div className="pb-20 min-h-screen bg-gradient-to-br from-primary via-primary-dark to-secondary text-white animate-fade-in">
+    <div className="pb-20 min-h-screen bg-background text-white animate-fade-in">
       {/* Header */}
       <Header />
 

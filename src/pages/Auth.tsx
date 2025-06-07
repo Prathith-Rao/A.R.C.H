@@ -67,7 +67,11 @@ const Auth = () => {
       <div className="min-h-screen bg-gradient-to-br from-arch to-arch-lighter flex items-center justify-center">
         <div className="animate-pulse-slow">
           <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
-            <span className="text-2xl gradient-text font-bold">A</span>
+            <img 
+              src="/lovable-uploads/a586ee94-dd25-4e2a-b5b1-61983b1ed07a.png" 
+              alt="A.R.C.H Logo" 
+              className="w-12 h-12"
+            />
           </div>
         </div>
       </div>
@@ -79,7 +83,14 @@ const Auth = () => {
       {/* Header */}
       <div className="h-40 bg-gradient-to-r from-white/10 to-white/20 backdrop-blur-sm flex items-center justify-center animate-slide-in-bottom">
         <div className="text-center">
-          <h1 className="text-white text-4xl font-bold mb-2 animate-float">A.R.C.H</h1>
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <img 
+              src="/lovable-uploads/a586ee94-dd25-4e2a-b5b1-61983b1ed07a.png" 
+              alt="A.R.C.H Logo" 
+              className="w-12 h-12 animate-float"
+            />
+            <h1 className="text-white text-4xl font-bold animate-float">A.R.C.H</h1>
+          </div>
           <p className="text-white/80 text-sm">Architectural & Cultural Heritage of India</p>
         </div>
       </div>
