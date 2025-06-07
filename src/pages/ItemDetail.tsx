@@ -3,7 +3,10 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, ExternalLink, MapPin, Calendar, User } from "lucide-react";
+import { ArrowLeft, ExternalLink, MapPin, Calendar, User, Heart } from "lucide-react";
+import { useFavorites } from "@/contexts/FavoritesContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "@/hooks/use-toast";
 import { 
   architectureCategories, 
   artCategories, 
@@ -15,6 +18,8 @@ import {
 const ItemDetail = () => {
   const { category, id } = useParams();
   const navigate = useNavigate();
+  const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
+  const { user } = useAuth();
 
   const findItem = () => {
     let allItems: any[] = [];
@@ -54,13 +59,52 @@ const ItemDetail = () => {
 
   const item = findItem();
 
+  const handleFavoriteToggle = () => {
+    if (!user) {
+      toast({
+        title: "Login Required",
+        description: "Please login to add items to favorites.",
+        variant: "destructive",
+      });
+      navigate("/auth");
+      return;
+    }
+
+    if (!item) return;
+
+    const favoriteItem = {
+      id: item.id,
+      categoryType: category || 'heritage',
+      name: item.name,
+      imageUrl: item.imageUrl,
+      description: item.description,
+      location: item.location,
+      artist: item.artist,
+      period: item.period,
+    };
+
+    if (isFavorite(item.id)) {
+      removeFromFavorites(item.id);
+      toast({
+        title: "Removed from favorites",
+        description: `${item.name} has been removed from your favorites.`,
+      });
+    } else {
+      addToFavorites(favoriteItem);
+      toast({
+        title: "Added to favorites",
+        description: `${item.name} has been added to your favorites.`,
+      });
+    }
+  };
+
   if (!item) {
     return (
-      <div className="min-h-screen bg-arch flex items-center justify-center animate-fade-in">
-        <Card className="bg-accent/10 border-accent/20 max-w-md animate-scale-in">
+      <div className="min-h-screen bg-gradient-to-br from-primary via-primary-dark to-secondary text-white flex items-center justify-center animate-fade-in">
+        <Card className="bg-white/10 border-white/20 max-w-md animate-scale-in">
           <CardContent className="p-6 text-center">
-            <h2 className="text-accent text-xl font-bold mb-4">Item Not Found</h2>
-            <Button onClick={() => navigate(-1)} className="arch-gradient text-arch hover-scale transition-all duration-300">
+            <h2 className="text-white text-xl font-bold mb-4">Item Not Found</h2>
+            <Button onClick={() => navigate(-1)} className="bg-accent text-white hover:bg-accent-light hover-scale transition-all duration-300">
               Go Back
             </Button>
           </CardContent>
@@ -70,19 +114,35 @@ const ItemDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-arch text-white animate-fade-in">
+    <div className="min-h-screen bg-gradient-to-br from-primary via-primary-dark to-secondary text-white animate-fade-in">
       {/* Header */}
-      <div className="h-32 arch-gradient flex items-center px-6 animate-slide-in-bottom">
-        <Button 
-          onClick={() => navigate(-1)}
-          variant="ghost"
-          className="text-arch hover:bg-arch/10 mr-4 hover-scale transition-all duration-300"
-        >
-          <ArrowLeft size={20} />
-        </Button>
-        <div>
-          <h1 className="text-arch text-2xl font-bold">{item.name}</h1>
-          <p className="text-arch/80 text-sm">{item.categoryName}</p>
+      <div className="bg-gradient-to-r from-primary to-primary-light p-6 animate-slide-in-bottom shadow-lg">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <Button 
+              onClick={() => navigate(-1)}
+              variant="ghost"
+              className="text-white hover:bg-white/10 mr-4 hover-scale transition-all duration-300"
+            >
+              <ArrowLeft size={20} />
+            </Button>
+            <div>
+              <h1 className="text-white text-2xl font-bold">{item.name}</h1>
+              <p className="text-white/80 text-sm">{item.categoryName}</p>
+            </div>
+          </div>
+          <Button
+            onClick={handleFavoriteToggle}
+            variant="ghost"
+            className="text-white hover:bg-white/10 hover-scale transition-all duration-300"
+          >
+            <Heart 
+              size={24} 
+              className={`transition-colors duration-300 ${
+                isFavorite(item.id) ? 'text-red-500 fill-red-500' : 'text-white'
+              }`} 
+            />
+          </Button>
         </div>
       </div>
 
@@ -90,7 +150,7 @@ const ItemDetail = () => {
       <div className="p-6 pb-20">
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Hero Image */}
-          <Card className="bg-accent/10 border-accent/20 overflow-hidden animate-scale-in">
+          <Card className="bg-white/10 border-white/20 overflow-hidden animate-scale-in">
             <div className="aspect-video md:aspect-[21/9] overflow-hidden">
               <img 
                 src={item.imageUrl} 
@@ -104,12 +164,12 @@ const ItemDetail = () => {
           <div className="grid md:grid-cols-3 gap-6">
             {/* Description */}
             <div className="md:col-span-2 space-y-6">
-              <Card className="bg-accent/10 border-accent/20 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+              <Card className="bg-white/10 border-white/20 animate-fade-in" style={{ animationDelay: "0.2s" }}>
                 <CardHeader>
-                  <CardTitle className="text-accent text-xl">About {item.name}</CardTitle>
+                  <CardTitle className="text-white text-xl">About {item.name}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-accent-light leading-relaxed">
+                  <p className="text-white/80 leading-relaxed">
                     {item.description}
                   </p>
                 </CardContent>
@@ -117,11 +177,11 @@ const ItemDetail = () => {
 
               {/* Wikipedia Link */}
               {item.wikipediaUrl && (
-                <Card className="bg-accent/10 border-accent/20 animate-fade-in" style={{ animationDelay: "0.4s" }}>
+                <Card className="bg-white/10 border-white/20 animate-fade-in" style={{ animationDelay: "0.4s" }}>
                   <CardContent className="p-6">
                     <Button
                       variant="outline"
-                      className="border-accent/20 text-accent hover:bg-accent/10 w-full hover-scale transition-all duration-300"
+                      className="border-white/20 text-white hover:bg-white/10 w-full hover-scale transition-all duration-300"
                       onClick={() => window.open(item.wikipediaUrl, '_blank')}
                     >
                       <ExternalLink size={16} className="mr-2" />
@@ -134,41 +194,41 @@ const ItemDetail = () => {
 
             {/* Sidebar Info */}
             <div className="space-y-4">
-              <Card className="bg-accent/10 border-accent/20 animate-slide-in-right" style={{ animationDelay: "0.3s" }}>
+              <Card className="bg-white/10 border-white/20 animate-slide-in-right" style={{ animationDelay: "0.3s" }}>
                 <CardHeader>
-                  <CardTitle className="text-accent text-lg">Details</CardTitle>
+                  <CardTitle className="text-white text-lg">Details</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {item.location && (
                     <div className="flex items-center gap-3">
-                      <MapPin size={16} className="text-accent" />
-                      <span className="text-accent-light text-sm">{item.location}</span>
+                      <MapPin size={16} className="text-white" />
+                      <span className="text-white/80 text-sm">{item.location}</span>
                     </div>
                   )}
                   
                   {item.region && (
                     <div className="flex items-center gap-3">
-                      <MapPin size={16} className="text-accent" />
-                      <span className="text-accent-light text-sm">{item.region}</span>
+                      <MapPin size={16} className="text-white" />
+                      <span className="text-white/80 text-sm">{item.region}</span>
                     </div>
                   )}
                   
                   {item.artist && (
                     <div className="flex items-center gap-3">
-                      <User size={16} className="text-accent" />
-                      <span className="text-accent-light text-sm">{item.artist}</span>
+                      <User size={16} className="text-white" />
+                      <span className="text-white/80 text-sm">{item.artist}</span>
                     </div>
                   )}
                   
                   {item.period && (
                     <div className="flex items-center gap-3">
-                      <Calendar size={16} className="text-accent" />
-                      <span className="text-accent-light text-sm">{item.period}</span>
+                      <Calendar size={16} className="text-white" />
+                      <span className="text-white/80 text-sm">{item.period}</span>
                     </div>
                   )}
                   
-                  <div className="pt-2 border-t border-accent/20">
-                    <span className="bg-accent/20 text-accent text-xs px-2 py-1 rounded">
+                  <div className="pt-2 border-t border-white/20">
+                    <span className="bg-white/20 text-white text-xs px-2 py-1 rounded">
                       {item.categoryName}
                     </span>
                   </div>
@@ -176,12 +236,12 @@ const ItemDetail = () => {
               </Card>
 
               {/* Navigation */}
-              <Card className="bg-accent/5 border-accent/20 animate-slide-in-right" style={{ animationDelay: "0.5s" }}>
+              <Card className="bg-white/5 border-white/20 animate-slide-in-right" style={{ animationDelay: "0.5s" }}>
                 <CardContent className="p-4 space-y-3">
                   <Button
                     variant="outline"
                     size="sm"
-                    className="border-accent/20 text-accent hover:bg-accent/10 w-full hover-scale transition-all duration-300"
+                    className="border-white/20 text-white hover:bg-white/10 w-full hover-scale transition-all duration-300"
                     onClick={() => navigate(`/examples/${category}`)}
                   >
                     View All {item.categoryName}
@@ -189,7 +249,7 @@ const ItemDetail = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="border-accent/20 text-accent hover:bg-accent/10 w-full hover-scale transition-all duration-300"
+                    className="border-white/20 text-white hover:bg-white/10 w-full hover-scale transition-all duration-300"
                     onClick={() => navigate('/')}
                   >
                     Back to Home

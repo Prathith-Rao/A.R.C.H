@@ -11,6 +11,7 @@ import Favorites from "@/pages/Favorites";
 import Details from "@/pages/Details";
 import NotFound from "@/pages/NotFound";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import Examples from "@/pages/Examples";
 import ItemDetail from "@/pages/ItemDetail";
 
@@ -80,11 +81,13 @@ const AnimatedRoutes = () => {
 function App() {
   return (
     <AuthProvider>
-      <div className="min-h-screen bg-gradient-to-br from-primary via-primary-dark to-secondary">
-        <BrowserRouter>
-          <AnimatedRoutes />
-        </BrowserRouter>
-      </div>
+      <FavoritesProvider>
+        <div className="min-h-screen bg-gradient-to-br from-primary via-primary-dark to-secondary">
+          <BrowserRouter>
+            <AnimatedRoutes />
+          </BrowserRouter>
+        </div>
+      </FavoritesProvider>
     </AuthProvider>
   );
 }
