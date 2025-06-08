@@ -184,15 +184,13 @@ const Profile = () => {
             <button 
               className="w-full flex items-center p-4 hover:bg-red-700 text-left"
               onClick={() => {
-                toast({
-                  title: "About A.R.C.H",
-                  description: "Architectural and Cultural Heritage of India - Preserving our rich cultural legacy.",
-                });
-              }}
+              window.open("https://github.com/Prathith-Rao/A.R.C.H/issues", "_blank");
+            }}
             >
               <Info size={20} className="mr-3 text-red-700" />
               <span>About A.R.C.H</span>
             </button>
+
             
             <button 
               className="w-full flex items-center p-4 hover:bg-gray-50 text-left text-red-500"
