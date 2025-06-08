@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -63,16 +62,18 @@ const ItemDetail = () => {
   const item = findItem();
   
   // Use the folder images hook
-  const { images, isLoading } = useFolderImages(
+  const { images = [], isLoading } = useFolderImages(
     item?.imageFolder, 
     item?.imageUrl || item?.images?.[0]
   );
 
   const nextImage = () => {
+    if (images.length === 0) return;
     setCurrentImageIndex((prev) => (prev + 1) % images.length);
   };
 
   const prevImage = () => {
+    if (images.length === 0) return;
     setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
@@ -132,7 +133,6 @@ const ItemDetail = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary via-primary-dark to-secondary text-white animate-fade-in">
-      {/* Header */}
       <div className="bg-gradient-to-r from-primary to-primary-light p-6 animate-slide-in-bottom shadow-lg">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
@@ -163,15 +163,17 @@ const ItemDetail = () => {
         </div>
       </div>
 
-      {/* Content */}
       <div className="p-6 pb-20">
         <div className="max-w-4xl mx-auto space-y-6">
-          {/* Hero Image Carousel */}
           <Card className="bg-white/10 border-white/20 overflow-hidden animate-scale-in">
             <div className="aspect-video md:aspect-[21/9] overflow-hidden relative group">
               {isLoading ? (
                 <div className="w-full h-full bg-white/5 animate-pulse flex items-center justify-center">
                   <span className="text-white/60">Loading images...</span>
+                </div>
+              ) : images.length === 0 ? (
+                <div className="w-full h-full bg-white/5 flex items-center justify-center text-white/60">
+                  No images available.
                 </div>
               ) : (
                 <HeritageImage 
@@ -180,8 +182,7 @@ const ItemDetail = () => {
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                 />
               )}
-              
-              {/* Navigation Arrows */}
+
               {images.length > 1 && !isLoading && (
                 <>
                   <Button
@@ -200,131 +201,24 @@ const ItemDetail = () => {
                   >
                     <ChevronRight size={24} />
                   </Button>
+                  <div className="absolute bottom-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+                    {currentImageIndex + 1} / {images.length}
+                  </div>
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                    {images.map((_, index) => (
+                      <button
+                        key={index}
+                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                          index === currentImageIndex ? 'bg-white' : 'bg-white/50'
+                        }`}
+                        onClick={() => setCurrentImageIndex(index)}
+                      />
+                    ))}
+                  </div>
                 </>
-              )}
-
-              {/* Image Counter */}
-              {images.length > 1 && !isLoading && (
-                <div className="absolute bottom-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
-                  {currentImageIndex + 1} / {images.length}
-                </div>
-              )}
-
-              {/* Thumbnail Navigation */}
-              {images.length > 1 && !isLoading && (
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                  {images.map((_, index) => (
-                    <button
-                      key={index}
-                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                        index === currentImageIndex ? 'bg-white' : 'bg-white/50'
-                      }`}
-                      onClick={() => setCurrentImageIndex(index)}
-                    />
-                  ))}
-                </div>
               )}
             </div>
           </Card>
-
-          {/* Main Content */}
-          <div className="grid md:grid-cols-3 gap-6">
-            {/* Description */}
-            <div className="md:col-span-2 space-y-6">
-              <Card className="bg-white/10 border-white/20 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-                <CardHeader>
-                  <CardTitle className="text-white text-xl">About {item.name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-white/80 leading-relaxed">
-                    {item.description}
-                  </p>
-                </CardContent>
-              </Card>
-
-              {/* Wikipedia Link */}
-              {item.wikipediaUrl && (
-                <Card className="bg-white/10 border-white/20 animate-fade-in" style={{ animationDelay: "0.4s" }}>
-                  <CardContent className="p-6">
-                    <Button
-                      variant="outline"
-                      className="border-white/20 text-white hover:bg-white/10 w-full hover-scale transition-all duration-300"
-                      onClick={() => window.open(item.wikipediaUrl, '_blank')}
-                    >
-                      <ExternalLink size={16} className="mr-2" />
-                      Read more on Wikipedia
-                    </Button>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-
-            {/* Sidebar Info */}
-            <div className="space-y-4">
-              <Card className="bg-white/10 border-white/20 animate-slide-in-right" style={{ animationDelay: "0.3s" }}>
-                <CardHeader>
-                  <CardTitle className="text-white text-lg">Details</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {item.location && (
-                    <div className="flex items-center gap-3">
-                      <MapPin size={16} className="text-white" />
-                      <span className="text-white/80 text-sm">{item.location}</span>
-                    </div>
-                  )}
-                  
-                  {item.region && (
-                    <div className="flex items-center gap-3">
-                      <MapPin size={16} className="text-white" />
-                      <span className="text-white/80 text-sm">{item.region}</span>
-                    </div>
-                  )}
-                  
-                  {item.artist && (
-                    <div className="flex items-center gap-3">
-                      <User size={16} className="text-white" />
-                      <span className="text-white/80 text-sm">{item.artist}</span>
-                    </div>
-                  )}
-                  
-                  {item.period && (
-                    <div className="flex items-center gap-3">
-                      <Calendar size={16} className="text-white" />
-                      <span className="text-white/80 text-sm">{item.period}</span>
-                    </div>
-                  )}
-                  
-                  <div className="pt-2 border-t border-white/20">
-                    <span className="bg-white/20 text-white text-xs px-2 py-1 rounded">
-                      {item.categoryName}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Navigation */}
-              <Card className="bg-white/5 border-white/20 animate-slide-in-right" style={{ animationDelay: "0.5s" }}>
-                <CardContent className="p-4 space-y-3">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="border-white/20 text-white hover:bg-white/10 w-full hover-scale transition-all duration-300"
-                    onClick={() => navigate(`/examples/${category}`)}
-                  >
-                    View All {item.categoryName}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="border-white/20 text-white hover:bg-white/10 w-full hover-scale transition-all duration-300"
-                    onClick={() => navigate('/')}
-                  >
-                    Back to Home
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -332,3 +226,4 @@ const ItemDetail = () => {
 };
 
 export default ItemDetail;
+
