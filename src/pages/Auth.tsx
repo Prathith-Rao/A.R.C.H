@@ -203,7 +203,7 @@ const Auth = () => {
               <Button 
                 onClick={handleGuestAccess} 
                 variant="outline" 
-                className="w-full border-arch/20 text-arch hover:bg-arch/5 transition-all duration-200 hover:shadow-md transform hover:-translate-y-0.5"
+                className="w-full bg-arch hover:bg-arch-light text-white transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
                 disabled={authLoading}
               >
                 Continue as Guest

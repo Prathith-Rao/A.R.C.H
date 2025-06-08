@@ -84,7 +84,7 @@ const Profile = () => {
   return (
     <div className="pb-20 min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white p-4 shadow-sm flex items-center justify-between sticky top-0 z-10">
+      <header className="bg-arch p-4 shadow-sm flex items-center justify-between sticky top-0 z-10">
         <h1 className="text-xl font-poppins font-semibold text-foreground">Profile</h1>
         <Button 
           variant="ghost" 
@@ -97,7 +97,7 @@ const Profile = () => {
 
       {/* Main Content */}
       <main className="p-4">
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div className="bg-arch-lighter rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center">
             <div className="bg-india-saffron/10 rounded-full p-4 mr-4">
               <User size={32} className="text-india-saffron" />
@@ -149,14 +149,14 @@ const Profile = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+        <div className="bg-black rounded-lg shadow-sm overflow-hidden">
           <div className="p-4 border-b">
             <h3 className="font-medium">Account Settings</h3>
           </div>
           
           <div className="divide-y">
             <button 
-              className="w-full flex items-center p-4 hover:bg-gray-50 text-left"
+              className="w-full flex items-center p-4 hover:bg-red-700 text-left"
               onClick={() => {
                 toast({
                   title: "Coming soon",
@@ -164,12 +164,12 @@ const Profile = () => {
                 });
               }}
             >
-              <Settings size={20} className="mr-3 text-gray-500" />
+              <Settings size={20} className="mr-3 text-red-700" />
               <span>App Settings</span>
             </button>
             
             <button 
-              className="w-full flex items-center p-4 hover:bg-gray-50 text-left"
+              className="w-full flex items-center p-4 hover:bg-red-700 text-left"
               onClick={() => {
                 toast({
                   title: "Coming soon",
@@ -177,12 +177,12 @@ const Profile = () => {
                 });
               }}
             >
-              <HelpCircle size={20} className="mr-3 text-gray-500" />
+              <HelpCircle size={20} className="mr-3 text-red-700" />
               <span>Help & Support</span>
             </button>
             
             <button 
-              className="w-full flex items-center p-4 hover:bg-gray-50 text-left"
+              className="w-full flex items-center p-4 hover:bg-red-700 text-left"
               onClick={() => {
                 toast({
                   title: "About A.R.C.H",
@@ -190,7 +190,7 @@ const Profile = () => {
                 });
               }}
             >
-              <Info size={20} className="mr-3 text-gray-500" />
+              <Info size={20} className="mr-3 text-red-700" />
               <span>About A.R.C.H</span>
             </button>
             
