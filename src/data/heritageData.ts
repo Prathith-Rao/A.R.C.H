@@ -16,6 +16,11 @@ export const architectureCategories = [
         name: "Meenakshi Temple",
         location: "Madurai, Tamil Nadu",
         imageUrl: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1000",
+        images: [
+          "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1000",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Meenakshi_Amman_Temple_Towers.jpg/1200px-Meenakshi_Amman_Temple_Towers.jpg",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Meenakshi_Temple_-_Madurai_-_India_-_02.jpg/1200px-Meenakshi_Temple_-_Madurai_-_India_-_02.jpg"
+        ],
         description: "A historic Hindu temple dedicated to Goddess Meenakshi, known for its stunning Dravidian architecture and colorful gopurams.",
         wikipediaUrl: "https://en.wikipedia.org/wiki/Meenakshi_Temple"
       },
@@ -24,6 +29,11 @@ export const architectureCategories = [
         name: "Golden Temple",
         location: "Amritsar, Punjab",
         imageUrl: "https://images.unsplash.com/photo-1564507592333-c60657eea523?q=80&w=1000",
+        images: [
+          "https://images.unsplash.com/photo-1564507592333-c60657eea523?q=80&w=1000",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Golden_Temple_India.jpg/1200px-Golden_Temple_India.jpg",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Golden_Temple_at_Night.jpg/1200px-Golden_Temple_at_Night.jpg"
+        ],
         description: "The holiest Gurdwara of Sikhism, featuring stunning gold-plated architecture and the sacred Amrit Sarovar.",
         wikipediaUrl: "https://en.wikipedia.org/wiki/Golden_Temple"
       }
@@ -39,6 +49,11 @@ export const architectureCategories = [
         name: "Red Fort",
         location: "Delhi",
         imageUrl: "https://images.unsplash.com/photo-1587474260584-136574528045?q=80&w=1000",
+        images: [
+          "https://images.unsplash.com/photo-1587474260584-136574528045?q=80&w=1000",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Red_Fort_in_Delhi_03-2016_img3.jpg/1200px-Red_Fort_in_Delhi_03-2016_img3.jpg",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Red_Fort%2C_Delhi_by_alexfurr.jpg/1200px-Red_Fort%2C_Delhi_by_alexfurr.jpg"
+        ],
         description: "A historic fortified palace that served as the main residence of the Mughal emperors for nearly 200 years.",
         wikipediaUrl: "https://en.wikipedia.org/wiki/Red_Fort"
       },
@@ -47,6 +62,11 @@ export const architectureCategories = [
         name: "Chittorgarh Fort",
         location: "Rajasthan",
         imageUrl: "https://images.unsplash.com/photo-1466442929976-97f336a657be?q=80&w=1000",
+        images: [
+          "https://images.unsplash.com/photo-1466442929976-97f336a657be?q=80&w=1000",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Chittorgarh_Fort_Palace.jpg/1200px-Chittorgarh_Fort_Palace.jpg",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Chittorgarh_Fort_-_Rajasthan%2C_India.jpg/1200px-Chittorgarh_Fort_-_Rajasthan%2C_India.jpg"
+        ],
         description: "One of the largest forts in India, known for its valor, sacrifice, and architectural grandeur.",
         wikipediaUrl: "https://en.wikipedia.org/wiki/Chittorgarh_Fort"
       }
@@ -62,6 +82,11 @@ export const architectureCategories = [
         name: "City Palace",
         location: "Udaipur, Rajasthan",
         imageUrl: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1000",
+        images: [
+          "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1000",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Udaipur_City_Palace.jpg/1200px-Udaipur_City_Palace.jpg",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/City_Palace_Udaipur_India.jpg/1200px-City_Palace_Udaipur_India.jpg"
+        ],
         description: "A palace complex situated in the city of Udaipur, known for its beautiful architecture and stunning lake views.",
         wikipediaUrl: "https://en.wikipedia.org/wiki/City_Palace,_Udaipur"
       }
