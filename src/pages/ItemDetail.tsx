@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,6 +6,7 @@ import { ArrowLeft, ExternalLink, MapPin, Calendar, User, Heart, ChevronLeft, Ch
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import HeritageImage from "@/components/HeritageImage";
 import { 
   architectureCategories, 
   artCategories, 
@@ -164,7 +164,7 @@ const ItemDetail = () => {
           {/* Hero Image Carousel */}
           <Card className="bg-white/10 border-white/20 overflow-hidden animate-scale-in">
             <div className="aspect-video md:aspect-[21/9] overflow-hidden relative group">
-              <img 
+              <HeritageImage 
                 src={images[currentImageIndex]} 
                 alt={`${item.name} - Image ${currentImageIndex + 1}`}
                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
