@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,7 @@ import { useFavorites } from "@/contexts/FavoritesContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import HeritageImage from "@/components/HeritageImage";
+import { useFolderImages } from "@/hooks/useFolderImages";
 import { 
   architectureCategories, 
   artCategories, 
@@ -59,9 +61,12 @@ const ItemDetail = () => {
   };
 
   const item = findItem();
-
-  // Get images array or fallback to single imageUrl
-  const images = item?.images || [item?.imageUrl].filter(Boolean);
+  
+  // Use the folder images hook
+  const { images, isLoading } = useFolderImages(
+    item?.imageFolder, 
+    item?.imageUrl || item?.images?.[0]
+  );
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % images.length);
@@ -164,14 +169,20 @@ const ItemDetail = () => {
           {/* Hero Image Carousel */}
           <Card className="bg-white/10 border-white/20 overflow-hidden animate-scale-in">
             <div className="aspect-video md:aspect-[21/9] overflow-hidden relative group">
-              <HeritageImage 
-                src={images[currentImageIndex]} 
-                alt={`${item.name} - Image ${currentImageIndex + 1}`}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-              />
+              {isLoading ? (
+                <div className="w-full h-full bg-white/5 animate-pulse flex items-center justify-center">
+                  <span className="text-white/60">Loading images...</span>
+                </div>
+              ) : (
+                <HeritageImage 
+                  src={images[currentImageIndex]} 
+                  alt={`${item.name} - Image ${currentImageIndex + 1}`}
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                />
+              )}
               
               {/* Navigation Arrows */}
-              {images.length > 1 && (
+              {images.length > 1 && !isLoading && (
                 <>
                   <Button
                     variant="ghost"
@@ -193,14 +204,14 @@ const ItemDetail = () => {
               )}
 
               {/* Image Counter */}
-              {images.length > 1 && (
+              {images.length > 1 && !isLoading && (
                 <div className="absolute bottom-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
                   {currentImageIndex + 1} / {images.length}
                 </div>
               )}
 
               {/* Thumbnail Navigation */}
-              {images.length > 1 && (
+              {images.length > 1 && !isLoading && (
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
                   {images.map((_, index) => (
                     <button

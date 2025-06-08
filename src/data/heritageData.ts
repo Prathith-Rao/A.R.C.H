@@ -14,12 +14,8 @@ export const architectureCategories = [
         id: "temple-1",
         name: "Meenakshi Temple",
         location: "Madurai, Tamil Nadu",
-        imageUrl: "/images/heritage/temples/meenakshi-1.jpg",
-        images: [
-          "/images/heritage/temples/meenakshi-1.jpg",
-          "/images/heritage/temples/meenakshi-2.jpg",
-          "/images/heritage/temples/meenakshi-3.jpg"
-        ],
+        imageFolder: "/images/heritage/temples/meenakshi/",
+        imageUrl: "/images/heritage/temples/meenakshi/1.jpg", // Primary image for backwards compatibility
         description: "A historic Hindu temple dedicated to Goddess Meenakshi, known for its stunning Dravidian architecture and colorful gopurams.",
         wikipediaUrl: "https://en.wikipedia.org/wiki/Meenakshi_Temple"
       },
@@ -27,12 +23,8 @@ export const architectureCategories = [
         id: "temple-2",
         name: "Golden Temple",
         location: "Amritsar, Punjab",
-        imageUrl: "/images/heritage/temples/golden-temple-1.jpg",
-        images: [
-          "/images/heritage/temples/golden-temple-1.jpg",
-          "/images/heritage/temples/golden-temple-2.jpg",
-          "/images/heritage/temples/meenakshi-1.jpg"
-        ],
+        imageFolder: "/images/heritage/temples/golden-temple/",
+        imageUrl: "/images/heritage/temples/golden-temple/1.jpg",
         description: "The holiest Gurdwara of Sikhism, featuring stunning gold-plated architecture and the sacred Amrit Sarovar.",
         wikipediaUrl: "https://en.wikipedia.org/wiki/Golden_Temple"
       }
@@ -47,12 +39,8 @@ export const architectureCategories = [
         id: "fort-1",
         name: "Red Fort",
         location: "Delhi",
-        imageUrl: "/images/heritage/forts/red-fort-1.jpg",
-        images: [
-          "/images/heritage/forts/red-fort-1.jpg",
-          "/images/heritage/forts/red-fort-2.jpg",
-          "/images/heritage/temples/golden-temple-1.jpg"
-        ],
+        imageFolder: "/images/heritage/forts/red-fort/",
+        imageUrl: "/images/heritage/forts/red-fort/1.jpg",
         description: "A historic fortified palace that served as the main residence of the Mughal emperors for nearly 200 years.",
         wikipediaUrl: "https://en.wikipedia.org/wiki/Red_Fort"
       },
@@ -60,12 +48,8 @@ export const architectureCategories = [
         id: "fort-2",
         name: "Chittorgarh Fort",
         location: "Rajasthan",
-        imageUrl: "/images/heritage/forts/chittorgarh-1.jpg",
-        images: [
-          "/images/heritage/forts/chittorgarh-1.jpg",
-          "/images/heritage/forts/red-fort-1.jpg",
-          "/images/heritage/temples/meenakshi-1.jpg"
-        ],
+        imageFolder: "/images/heritage/forts/chittorgarh/",
+        imageUrl: "/images/heritage/forts/chittorgarh/1.jpg",
         description: "One of the largest forts in India, known for its valor, sacrifice, and architectural grandeur.",
         wikipediaUrl: "https://en.wikipedia.org/wiki/Chittorgarh_Fort"
       }
@@ -80,12 +64,8 @@ export const architectureCategories = [
         id: "palace-1",
         name: "City Palace",
         location: "Udaipur, Rajasthan",
-        imageUrl: "/images/heritage/palaces/city-palace-1.jpg",
-        images: [
-          "/images/heritage/palaces/city-palace-1.jpg",
-          "/images/heritage/forts/red-fort-1.jpg",
-          "/images/heritage/temples/golden-temple-1.jpg"
-        ],
+        imageFolder: "/images/heritage/palaces/city-palace/",
+        imageUrl: "/images/heritage/palaces/city-palace/1.jpg",
         description: "A palace complex situated in the city of Udaipur, known for its beautiful architecture and stunning lake views.",
         wikipediaUrl: "https://en.wikipedia.org/wiki/City_Palace,_Udaipur"
       }
