@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { mockHeritageData } from "@/data/heritageData";
@@ -54,7 +53,7 @@ const Explore = () => {
                   key={state}
                   className="bg-accent/10 border-accent/20 hover:bg-accent/20 transition-all duration-300 cursor-pointer hover-lift group animate-scale-in"
                   style={{ animationDelay: `${index * 0.1}s` }}
-                  onClick={() => navigate(`/explore/state/${state}`)}
+                  onClick={() => navigate(`/explore/state/${encodeURIComponent(state)}`)}
                 >
                   <CardContent className="p-4">
                     <h3 className="text-accent font-medium group-hover:text-accent-light transition-colors duration-300">{state}</h3>
@@ -74,7 +73,7 @@ const Explore = () => {
                   key={category}
                   className="bg-accent/10 border-accent/20 hover:bg-accent/20 transition-all duration-300 cursor-pointer hover-lift group animate-scale-in"
                   style={{ animationDelay: `${index * 0.1}s` }}
-                  onClick={() => navigate(`/explore/category/${category}`)}
+                  onClick={() => navigate(`/explore/category/${encodeURIComponent(category)}`)}
                 >
                   <CardContent className="p-4">
                     <h3 className="text-accent font-medium group-hover:text-accent-light transition-colors duration-300">{category}</h3>
@@ -94,7 +93,7 @@ const Explore = () => {
                   key={era}
                   className="bg-accent/10 border-accent/20 hover:bg-accent/20 transition-all duration-300 cursor-pointer hover-lift group animate-scale-in"
                   style={{ animationDelay: `${index * 0.1}s` }}
-                  onClick={() => navigate(`/explore/era/${era}`)}
+                  onClick={() => navigate(`/explore/era/${encodeURIComponent(era)}`)}
                 >
                   <CardContent className="p-4">
                     <h3 className="text-accent font-medium group-hover:text-accent-light transition-colors duration-300">{era}</h3>

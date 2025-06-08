@@ -1,3 +1,4 @@
+
 export const statesData = [
   "Rajasthan", "Tamil Nadu", "Kerala", "Maharashtra", "Gujarat", 
   "Karnataka", "Uttar Pradesh", "West Bengal", "Madhya Pradesh", 
@@ -15,7 +16,7 @@ export const architectureCategories = [
         name: "Meenakshi Temple",
         location: "Madurai, Tamil Nadu",
         imageFolder: "/images/heritage/temples/meenakshi/",
-        imageUrl: "/images/heritage/temples/meenakshi/1.jpg", // Primary image for backwards compatibility
+        imageUrl: "/images/heritage/temples/meenakshi/1.jpg",
         description: "A historic Hindu temple dedicated to Goddess Meenakshi, known for its stunning Dravidian architecture and colorful gopurams.",
         wikipediaUrl: "https://en.wikipedia.org/wiki/Meenakshi_Temple"
       },
@@ -83,7 +84,8 @@ export const artCategories = [
         id: "art-1",
         name: "Madhubani Fish Motif",
         artist: "Traditional Bihar Artists",
-        imageUrl: "https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?q=80&w=1000",
+        imageFolder: "/images/heritage/art/madhubani/",
+        imageUrl: "/images/heritage/art/madhubani/1.jpg",
         description: "A traditional Madhubani painting featuring fish motifs, symbolizing fertility and prosperity in Bihar's folk art tradition.",
         wikipediaUrl: "https://en.wikipedia.org/wiki/Madhubani_art"
       }
@@ -98,7 +100,8 @@ export const artCategories = [
         id: "art-2",
         name: "Warli Village Life",
         artist: "Traditional Warli Artists",
-        imageUrl: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1000",
+        imageFolder: "/images/heritage/art/warli/",
+        imageUrl: "/images/heritage/art/warli/1.jpg",
         description: "Traditional Warli painting depicting village life with characteristic stick figures and geometric patterns.",
         wikipediaUrl: "https://en.wikipedia.org/wiki/Warli_painting"
       }
@@ -118,7 +121,8 @@ export const famousBattles = [
         id: "battle-1",
         name: "First Battle of Panipat (1526)",
         description: "Babur's victory over Ibrahim Lodi that established the Mughal Empire in India.",
-        imageUrl: "https://images.unsplash.com/photo-1482881497185-d4a9ddbe4151?q=80&w=1000"
+        imageFolder: "/images/heritage/battles/panipat/",
+        imageUrl: "/images/heritage/battles/panipat/1.jpg"
       }
     ]
   },
@@ -133,7 +137,8 @@ export const famousBattles = [
         id: "battle-2",
         name: "Maharana Pratap's Last Stand",
         description: "The heroic resistance of Maharana Pratap against the mighty Mughal army.",
-        imageUrl: "https://images.unsplash.com/photo-1472396961693-142e6e269027?q=80&w=1000"
+        imageFolder: "/images/heritage/battles/haldighati/",
+        imageUrl: "/images/heritage/battles/haldighati/1.jpg"
       }
     ]
   }
@@ -149,7 +154,8 @@ export const culturalElements = [
         id: "festival-1",
         name: "Diwali",
         region: "Pan-India",
-        imageUrl: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1000",
+        imageFolder: "/images/heritage/culture/festivals/diwali/",
+        imageUrl: "/images/heritage/culture/festivals/diwali/1.jpg",
         description: "The festival of lights celebrated across India, symbolizing the victory of light over darkness.",
         wikipediaUrl: "https://en.wikipedia.org/wiki/Diwali"
       }
@@ -164,7 +170,8 @@ export const culturalElements = [
         id: "dance-1",
         name: "Bharatanatyam",
         region: "Tamil Nadu",
-        imageUrl: "https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?q=80&w=1000",
+        imageFolder: "/images/heritage/culture/dance/bharatanatyam/",
+        imageUrl: "/images/heritage/culture/dance/bharatanatyam/1.jpg",
         description: "A classical Indian dance form that originated in Tamil Nadu, known for its grace, expressions, and storytelling.",
         wikipediaUrl: "https://en.wikipedia.org/wiki/Bharatanatyam"
       }
@@ -183,7 +190,8 @@ export const timelinePeriods = [
       {
         id: "period-1",
         name: "Harappa Archaeological Site",
-        imageUrl: "https://images.unsplash.com/photo-1482881497185-d4a9ddbe4151?q=80&w=1000",
+        imageFolder: "/images/heritage/timeline/indus-valley/",
+        imageUrl: "/images/heritage/timeline/indus-valley/1.jpg",
         description: "Ancient city ruins showcasing the sophisticated urban planning of the Indus Valley Civilization."
       }
     ]
@@ -198,7 +206,8 @@ export const timelinePeriods = [
       {
         id: "period-2",
         name: "Taj Mahal",
-        imageUrl: "https://images.unsplash.com/photo-1564507592333-c60657eea523?q=80&w=1000",
+        imageFolder: "/images/heritage/timeline/mughal/",
+        imageUrl: "/images/heritage/timeline/mughal/1.jpg",
         description: "The crown jewel of Mughal architecture, built by Shah Jahan as a mausoleum for his wife Mumtaz Mahal."
       }
     ]
@@ -216,6 +225,7 @@ export interface HeritageItem {
   category: string;
   era: string;
   imageUrl: string;
+  imageFolder?: string;
   description: string;
   keywords?: string[];
   period?: string;
@@ -224,7 +234,7 @@ export interface HeritageItem {
   region?: string;
 }
 
-// Enhanced mock heritage data with more comprehensive search fields
+// Enhanced mock heritage data with more comprehensive search fields and folder paths
 export const mockHeritageData: HeritageItem[] = [
   {
     id: "1",
@@ -232,7 +242,8 @@ export const mockHeritageData: HeritageItem[] = [
     location: { state: "Uttar Pradesh", city: "Agra" },
     category: "Tombs",
     era: "Mughal Empire",
-    imageUrl: "https://images.unsplash.com/photo-1564507592333-c60657eea523?q=80&w=1000",
+    imageFolder: "/images/heritage/mock/taj-mahal/",
+    imageUrl: "/images/heritage/mock/taj-mahal/1.jpg",
     description: "Iconic marble mausoleum built by Shah Jahan",
     keywords: ["marble", "mausoleum", "Shah Jahan", "Mumtaz Mahal", "UNESCO", "wonder", "love"],
     period: "1632-1653",
@@ -244,7 +255,8 @@ export const mockHeritageData: HeritageItem[] = [
     location: { state: "Delhi", city: "Delhi" },
     category: "Forts",
     era: "Mughal Empire",
-    imageUrl: "https://images.unsplash.com/photo-1587474260584-136574528045?q=80&w=1000",
+    imageFolder: "/images/heritage/mock/red-fort/",
+    imageUrl: "/images/heritage/mock/red-fort/1.jpg",
     description: "Historic fortified palace of the Mughal emperors",
     keywords: ["Lal Qila", "fortified", "palace", "emperor", "independence", "flag"],
     period: "1638-1648",
@@ -256,7 +268,8 @@ export const mockHeritageData: HeritageItem[] = [
     location: { state: "Karnataka", city: "Mysore" },
     category: "Palaces", 
     era: "British Colonial Era",
-    imageUrl: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1000",
+    imageFolder: "/images/heritage/mock/mysore-palace/",
+    imageUrl: "/images/heritage/mock/mysore-palace/1.jpg",
     description: "Royal residence of the Wadiyar dynasty",
     keywords: ["royal", "Wadiyar", "Dussehra", "illumination", "architecture"],
     period: "1912",
@@ -268,7 +281,8 @@ export const mockHeritageData: HeritageItem[] = [
     location: { state: "Tamil Nadu", city: "Madurai" },
     category: "Temples",
     era: "Ancient Period",
-    imageUrl: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=1000",
+    imageFolder: "/images/heritage/mock/meenakshi-temple/",
+    imageUrl: "/images/heritage/mock/meenakshi-temple/1.jpg",
     description: "Historic Hindu temple with stunning Dravidian architecture",
     keywords: ["Dravidian", "gopuram", "Hindu", "goddess", "colorful", "ancient"],
     period: "6th century CE",
@@ -280,7 +294,8 @@ export const mockHeritageData: HeritageItem[] = [
     location: { state: "Punjab", city: "Amritsar" },
     category: "Temples",
     era: "Sikh Period",
-    imageUrl: "https://images.unsplash.com/photo-1564507592333-c60657eea523?q=80&w=1000",
+    imageFolder: "/images/heritage/mock/golden-temple/",
+    imageUrl: "/images/heritage/mock/golden-temple/1.jpg",
     description: "Holiest Gurdwara of Sikhism with gold-plated architecture",
     keywords: ["Gurdwara", "Sikh", "gold", "Amrit Sarovar", "langar", "holy"],
     period: "1604",
@@ -303,6 +318,7 @@ export const getAllHeritageItems = (): HeritageItem[] => {
         category: category.name,
         era: 'Historical Period',
         imageUrl: example.imageUrl,
+        imageFolder: example.imageFolder,
         description: example.description,
         keywords: [category.name.toLowerCase(), 'architecture', 'heritage']
       });
@@ -319,6 +335,7 @@ export const getAllHeritageItems = (): HeritageItem[] => {
         category: 'Art',
         era: 'Traditional Period',
         imageUrl: example.imageUrl,
+        imageFolder: example.imageFolder,
         description: example.description,
         artist: example.artist,
         region: category.region,
@@ -337,6 +354,7 @@ export const getAllHeritageItems = (): HeritageItem[] => {
         category: 'Historical Site',
         era: period.name,
         imageUrl: example.imageUrl,
+        imageFolder: example.imageFolder,
         description: example.description,
         period: period.period,
         keywords: [period.name.toLowerCase(), 'historical', 'civilization', 'period']
@@ -354,6 +372,7 @@ export const getAllHeritageItems = (): HeritageItem[] => {
         category: 'Historical Battle',
         era: battle.years,
         imageUrl: example.imageUrl,
+        imageFolder: example.imageFolder,
         description: example.description,
         significance: battle.significance,
         keywords: [battle.name.toLowerCase(), 'battle', 'war', 'historical']
@@ -371,6 +390,7 @@ export const getAllHeritageItems = (): HeritageItem[] => {
         category: element.name,
         era: 'Cultural Tradition',
         imageUrl: example.imageUrl,
+        imageFolder: example.imageFolder,
         description: example.description,
         region: example.region,
         keywords: [element.name.toLowerCase(), 'culture', 'tradition', 'festival']
