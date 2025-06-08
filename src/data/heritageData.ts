@@ -69,6 +69,15 @@ export const architectureCategories = [
         imageUrl: "/images/heritage/palaces/city-palace/1.jpg",
         description: "A palace complex situated in the city of Udaipur, known for its beautiful architecture and stunning lake views.",
         wikipediaUrl: "https://en.wikipedia.org/wiki/City_Palace,_Udaipur"
+      },
+      {
+        id: "palace-2",
+        name: "Mysuru Palace",
+        location: "Mysuru, Karnataka",
+        imageFolder: "/images/heritage/palaces/mysuru-palace/",
+        imageUrl: "/images/heritage/palaces/mysuru-palace/1.jpg",
+        description: "Royal residence of the Wadiyar dynasty, known for its Indo-Saracenic architecture and grand Durbar Hall.",
+        wikipediaUrl: "https://en.wikipedia.org/wiki/Mysore_Palace"
       }
     ]
   }
