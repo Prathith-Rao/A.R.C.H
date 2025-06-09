@@ -70,7 +70,7 @@ const Auth = () => {
             <img 
               src="/lovable-uploads/a586ee94-dd25-4e2a-b5b1-61983b1ed07a.png" 
               alt="A.R.C.H Logo" 
-              className="w-12 h-12"
+              className="w-12 h-12 rounded-full"
             />
           </div>
         </div>
@@ -87,7 +87,7 @@ const Auth = () => {
             <img 
               src="/lovable-uploads/a586ee94-dd25-4e2a-b5b1-61983b1ed07a.png" 
               alt="A.R.C.H Logo" 
-              className="w-12 h-12 animate-float"
+              className="w-12 h-12 animate-float rounded-full"
             />
             <h1 className="text-white text-4xl font-bold animate-float">A.R.C.H</h1>
           </div>
