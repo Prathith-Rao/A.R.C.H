@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, ExternalLink, MapPin, Calendar, User, Heart, ChevronLeft, ChevronRight } from "lucide-react";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { ArrowLeft, ExternalLink, MapPin, Calendar, User, Heart } from "lucide-react";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
@@ -22,7 +23,6 @@ const ItemDetail = () => {
   const navigate = useNavigate();
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
   const { user } = useAuth();
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const findItem = () => {
     let allItems: any[] = [];
@@ -67,14 +67,6 @@ const ItemDetail = () => {
     item?.imageFolder, 
     item?.imageUrl || item?.images?.[0]
   );
-
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % images.length);
-  };
-
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
 
   const handleFavoriteToggle = () => {
     if (!user) {
@@ -168,61 +160,31 @@ const ItemDetail = () => {
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Hero Image Carousel */}
           <Card className="bg-white/10 border-white/20 overflow-hidden animate-scale-in">
-            <div className="aspect-video md:aspect-[21/9] overflow-hidden relative group">
+            <div className="aspect-video md:aspect-[21/9] overflow-hidden relative">
               {isLoading ? (
                 <div className="w-full h-full bg-white/5 animate-pulse flex items-center justify-center">
                   <span className="text-white/60">Loading images...</span>
                 </div>
               ) : (
-                <HeritageImage 
-                  src={images[currentImageIndex]} 
-                  alt={`${item.name} - Image ${currentImageIndex + 1}`}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-                />
-              )}
-              
-              {/* Navigation Arrows */}
-              {images.length > 1 && !isLoading && (
-                <>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 text-white hover:bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    onClick={prevImage}
-                  >
-                    <ChevronLeft size={24} />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 text-white hover:bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    onClick={nextImage}
-                  >
-                    <ChevronRight size={24} />
-                  </Button>
-                </>
-              )}
-
-              {/* Image Counter */}
-              {images.length > 1 && !isLoading && (
-                <div className="absolute bottom-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
-                  {currentImageIndex + 1} / {images.length}
-                </div>
-              )}
-
-              {/* Thumbnail Navigation */}
-              {images.length > 1 && !isLoading && (
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                  {images.map((_, index) => (
-                    <button
-                      key={index}
-                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                        index === currentImageIndex ? 'bg-white' : 'bg-white/50'
-                      }`}
-                      onClick={() => setCurrentImageIndex(index)}
-                    />
-                  ))}
-                </div>
+                <Carousel className="w-full h-full">
+                  <CarouselContent>
+                    {images.map((image, index) => (
+                      <CarouselItem key={index}>
+                        <HeritageImage 
+                          src={image} 
+                          alt={`${item.name} - Image ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  {images.length > 1 && (
+                    <>
+                      <CarouselPrevious className="left-4" />
+                      <CarouselNext className="right-4" />
+                    </>
+                  )}
+                </Carousel>
               )}
             </div>
           </Card>

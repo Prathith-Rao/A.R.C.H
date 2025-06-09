@@ -8,7 +8,7 @@ const Header = () => {
         <img 
           src="/lovable-uploads/a586ee94-dd25-4e2a-b5b1-61983b1ed07a.png" 
           alt="Indian Heritage Logo" 
-          className="w-16 h-16 animate-float"
+          className="w-16 h-16 animate-float rounded-full"
         />
         <div>
           <h1 className="text-3xl font-bold text-white animate-float">
