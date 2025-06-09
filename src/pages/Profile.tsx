@@ -169,13 +169,11 @@ const Profile = () => {
             </button>
             
             <button 
-              className="w-full flex items-center p-4 hover:bg-red-700 text-left"
+                className="w-full flex items-center p-4 hover:bg-red-700 text-left"
               onClick={() => {
-                toast({
-                  title: "Coming soon",
-                  description: "This feature will be available in a future update.",
-                });
-              }}
+              window.open("https://github.com/Prathith-Rao/A.R.C.H/issues", "_blank");
+            }}
+            
             >
               <HelpCircle size={20} className="mr-3 text-red-700" />
               <span>Help & Support</span>
@@ -184,7 +182,7 @@ const Profile = () => {
             <button 
               className="w-full flex items-center p-4 hover:bg-red-700 text-left"
               onClick={() => {
-              window.open("https://github.com/Prathith-Rao/A.R.C.H/issues", "_blank");
+              window.open("https://github.com/Prathith-Rao/A.R.C.H", "_blank");
             }}
             >
               <Info size={20} className="mr-3 text-red-700" />
